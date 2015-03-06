@@ -1,5 +1,6 @@
 package org;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
 
@@ -122,15 +123,12 @@ public class ParseTree {
 		}
 	}
 	
-	private class Arbourist {
-		
-	}
-	
 	public static void main(String[] args) {
 		ParseTree tree = new ParseTree();
 		
-		tree.grow("add");
+		tree.grow("'add'");
 		tree.grow("5");
+		System.out.println(tree.toString());
 		System.out.println(tree.isComplete());
 	}
 }
