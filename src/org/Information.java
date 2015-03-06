@@ -20,15 +20,12 @@ public class Information {
 			System.out.println("The project prefix: " + name);
 			ArrayList<String> methodList = new ArrayList<String>();
 			methodList = methods(cl);
-			/*for(String tmp: methodList) { 
-				System.out.println("method list " + tmp); 
-			}*/
-			methodReturnType("getName",cl);
-			ArrayList<String> parameterList = new ArrayList<String>();
-			parameterList = parameter("equals",cl);
-			for(String tmp: parameterList) { 
-				System.out.println("parameter list " + tmp); 
-			}
+			/*
+			 * for(String tmp: methodList) { System.out.println("method list " +
+			 * tmp); }
+			 */
+			methodReturn(name,"getName");
+			methodParameter(name,"getName");
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		} catch (Exception e) {
@@ -46,26 +43,35 @@ public class Information {
 			// System.out.println("The name of the method " + name);
 			methodList.add(name);
 			// print parameter types
-			/*Class[] paramTypes = m.getParameterTypes();
-			for (int j = 0; j < paramTypes.length; j++)
-				System.out.println(paramTypes[j].getName()); */
+			/*
+			 * Class[] paramTypes = m.getParameterTypes(); for (int j = 0; j <
+			 * paramTypes.length; j++)
+			 * System.out.println(paramTypes[j].getName());
+			 */
 		}
-	return methodList;
+		return methodList;
 	}// end of method
-	public static void methodReturnType(String type, Class cl) throws Exception{
-		Class retType = cl.getMethod(type).getReturnType(); 
-		System.out.println("The return type is " + retType.getName());
+
+	public static void methodReturn(String className, String methodName) throws Exception{
+		List<Method> ms = Arrays.asList(Class.forName(className).getMethods());
+		for (Method m : ms) {
+			if (m.getName().equals(methodName)) {
+				System.out.println(m.getReturnType().toString());
+			}
+		}	
+	}// end method
+	public static void methodParameter(String className, String methodName) throws Exception{
+		List<Method> ms = Arrays.asList(Class.forName(className).getMethods());
+		for (Method m : ms) {
+			if (m.getName().equals(methodName)) {
+				Class[] paramTypes = m.getParameterTypes(); 
+				for (int j = 0; j < paramTypes.length; j++)   {   
+					if (j > 0) {
+						System.out.print(" ");  
+					} 
+                System.out.print(paramTypes[j].getName());   
+				}   
+			}
+		}	
 	}
-	public static void methodReturnTypeWithParameter(String type, Class cl) throws Exception{
-		Class retType = cl.getMethod(type,Object.class).getReturnType(); //,Object.class
-		System.out.println("The return type is " + retType.getName());
-	}
-	/*public static ArrayList<String> parameter(String type, Class cl) throws Exception {
-		ArrayList<String> parameterList = new ArrayList<String>();
-		Class[] paramTypes = cl.getMethod(type).getParameterTypes();
-		for (int j = 0; j < paramTypes.length; j++) {
-			parameterList.add(paramTypes[j].getName());
-		}
-		return parameterList;
-	}*/
 }
