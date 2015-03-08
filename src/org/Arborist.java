@@ -1,4 +1,4 @@
-package org;
+//package org;
 
 import java.util.ArrayList;
 
@@ -148,7 +148,7 @@ public class Arborist {
 		properArguments.add(new Integer[] {110, 110, 110});
 		properArguments.add(new Integer[] {100, 100, 100});
 		properArguments.add(new Integer[] {001, 001, 110});
-		
+		properArguments.add(new Integer[] {110, 001});
 		int returnType = 0;
 		
 		ArgumentChecking:
@@ -179,8 +179,9 @@ public class Arborist {
 			//  4. (add (mult 5 5) (mult 5. 5)) PASS
 			//  5. "Hello"  PASS
 			//  6. (charAT "Hello" 5) PASS
+			//  7.  (add 5 (length \"hello\")) PASS
 			
-			int[] result = a.checkArgument("(charAt \"Hello\" 5)", new int[] {0, Integer.MAX_VALUE, 0});
+			int[] result = a.checkArgument("(add 5 (length \"hello\"))", new int[] {0, Integer.MAX_VALUE, 0});
 			for (int i= 0; i < result.length; i++)
 				System.out.println(result[i] + ", ");
 		} catch (Exception e) {
