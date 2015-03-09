@@ -108,7 +108,7 @@ public class ParseTree {
 			
 			// the following is an ad-hoc implementation of checkCompleteness that allows each node to have only two children
 			
-			if (value == "2" || value == "5")
+			if (value == "2" || value == "5" || value == "\"hello\"")
 				complete = true;
 			
 			if (children.size() == 2) {
@@ -126,9 +126,7 @@ public class ParseTree {
 	public static void main(String[] args) {
 		ParseTree tree = new ParseTree();
 		
-		tree.grow("'add'");
-		tree.grow("5");
+		tree.grow("\"hello\"");
 		System.out.println(tree.toString());
-		System.out.println(tree.isComplete());
 	}
 }
