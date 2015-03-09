@@ -85,7 +85,7 @@ public class Interpereter {
 						jarIsNotAJarError(); // How do we tell the diff between exit code -3 and -5?
 					}
 					jar = arg;
-				} else if (methodsClass == null) {
+				} else if (jar != null && methodsClass == null) {
 					methodsClass = arg;
 				} else {
 					toManyArgumentsError(); // Should exit with synopsis
