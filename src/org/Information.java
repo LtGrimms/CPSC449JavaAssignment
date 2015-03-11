@@ -59,6 +59,9 @@ public class Information {
 				else if (m.getReturnType().toString() == "int") {
 					properArguments.add(110);
 				}
+				else if (m.getReturnType().toString() == "Integer") {
+					properArguments.add(110);
+				} 
 				//parameter block
 				Class[] paramTypes = m.getParameterTypes();
 				for (int j = 0; j < paramTypes.length; j++) {
@@ -69,6 +72,9 @@ public class Information {
 						properArguments.add(100);
 					}
 					else if (paramTypes[j].getName() == "int") {
+						properArguments.add(110);
+					}
+					else if (paramTypes[j].getName() == "Integer") {
 						properArguments.add(110);
 					}
 				}//end for 
