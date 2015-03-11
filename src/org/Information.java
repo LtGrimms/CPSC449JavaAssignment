@@ -79,4 +79,7 @@ public class Information {
 		}//end for
 		return properArguments;
 	}//end method 
+	public static Class getClassName() {
+		return cls;
+	}//end method
 }
