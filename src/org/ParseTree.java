@@ -72,7 +72,7 @@ public class ParseTree {
 	}
 	
 
-	private class Node {
+	protected class Node {
 		private Node parent;
 		private LinkedList<Node> children;
 		private String value;

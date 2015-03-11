@@ -52,13 +52,25 @@ public class TreeEvaluator {
 		
 	}
 	
-	public String evaluate(Node root){
-		String [] args;
-		args = new String[5];
+	public Object evaluate(Node root){
+		Object [] args;
+		args = new Object[5];
 		int i= 0;
-		String result;
+		Object result;
 		Node nxt;
-		String fun = root.getValue();
+		Object fun;
+		
+		if (root.getVariableType() == Integer.class) {
+				fun = Integer.parseInt(root.getValue());
+			}
+		else if (root.getVariableType() == Float.class) {
+				fun = Float.parseFloat(root.getValue());
+			}
+		else{
+				fun = root.getValue().replace("\"","");
+			}
+		
+		
 		LinkedList<Node> children = root.getChildren();
 		if (children == null){
 			return fun;
@@ -72,17 +84,15 @@ public class TreeEvaluator {
 			
 		}
 		
-		result = apply(fun, args);
+	
+		
+		result = root.getMethod().invoke(coms, (Object)args); 
+
 		
 		return result;
 	}
 	
-	private String apply(String fun, String[] args){
-		
-		
-		Method met = coms.getDeclaredMethod(fun, args)
-		return "this function is not done yet! :(";
-	}
+
 	
 	/*public static void main(String[] args) throws NoSuchMethodException, SecurityException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, ClassNotFoundException, IOException{
 		

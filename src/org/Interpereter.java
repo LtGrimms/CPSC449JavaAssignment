@@ -69,7 +69,7 @@ public class Interpereter {
 	public static void main(String[] args) {
 
 		//// Second try
-		// Still need to ask about the error with exit code -4 since  I dont think 
+		// Still need to ask about the error with exit code -4 since  I don't think 
 		// the loop below will catch it though it could with minor mods
 
 		String jar;
@@ -103,7 +103,7 @@ public class Interpereter {
 		
 		Information info = new Information(jar, methodsClass); // Needs to exit with code -6 if method class cannot be found and exit code -5 if jar cannot be loaded
 		Arborist arborist = new Arborist(info);
-		TreeEvaluator eval = new TreeEvaluator(info);
+		TreeEvaluator eval = new TreeEvaluator(info.getClass());
 		
 		while (true) {
 			Scanner in = new Scanner(System.in);
@@ -116,6 +116,7 @@ public class Interpereter {
 			} 
 			if (argument == "v") {
 				arborist.toggleVerbose();
+				// If anything else needs to toggle verbose put it here
 				continue;
 			} 
 			if (argument == "?") {
