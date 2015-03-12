@@ -40,14 +40,24 @@ public class Information {
 		Method[] methods = cls.getDeclaredMethods();
 		for (Method m : methods) {
 			String name = m.getName();
-			System.out.print("("+ name );
+			System.out.print("("+ name);
 			// print parameter types   
 			Class[] paramTypes = m.getParameterTypes(); 
-			for (int j = 0; j < paramTypes.length; j++)   {  
+			for (int j = 0; j < paramTypes.length; j++)   { 
+				System.out.print(" "); 
 				if (j > 0) {
 					System.out.print(" ");
 				}
-				System.out.print("("+ name + paramTypes[j].getName() );
+				String parameter = paramTypes[j].getName();
+				if (parameter.contains(".") ) {
+					int start = parameter.lastIndexOf(".") + 1;
+					int end = parameter.length();
+					String formatted = parameter.substring(start,end).toLowerCase();
+					System.out.print(formatted);
+				}
+				else {
+					System.out.print(paramTypes[j].getName() );
+				}//end else
 			}//end inner-for
 			String returnType = m.getReturnType().toString();
 			if (returnType.contains(".")) {
