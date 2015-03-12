@@ -53,7 +53,7 @@ public class Information {
 			if (returnType.contains(".")) {
 				int start = returnType.lastIndexOf(".") + 1;
 				int end = returnType.length();
-				String formatted = returnType.substring(start,end);
+				String formatted = returnType.substring(start,end).toLowerCase();
 				System.out.println(")" + " " + ": " + formatted ); 
 			}//end if
 			else {
