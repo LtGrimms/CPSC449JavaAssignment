@@ -1,6 +1,5 @@
 package org;
 
-//package org;
 import java.text.ParseException;
 import java.util.ArrayList;
 
@@ -16,13 +15,19 @@ public class Arborist {
 	}
 
 	/**
-	 * Creates an Arborist class with desired class information
+	 * Creates an arborist class with specific method data
 	 * @param info The method data that this arborist will use
 	 */
 	public Arborist(Information info) {
 		this.info = info;
 	}
 
+	/**
+	 * All non-fatal errors should call this function.
+	 * @param arg The string being parsed
+	 * @param error An explanation of the error
+	 * @param ex The ParseException with the index of the parse error
+	 */
 	private void parseError(String arg, String error,ParseException ex){
 		//ask
 		System.out.println(error+" at offest "+ex.getErrorOffset());
@@ -35,11 +40,27 @@ public class Arborist {
 			ex.printStackTrace();
 	}
 
-	public void checkArgument(String arg){
-		checkArgument(arg, new int[] {0, Integer.MAX_VALUE, 0});
+	/**
+	 * Before an Arborist grows a tree it will check the string for errors. This
+	 * is the function that checks strings for errors
+	 * @param arg The string to check for errors
+	 * @throws Exception 
+	 */
+	public void checkArgument(String arg) throws Exception{
+		checkArgument(arg, new int[] {0, Integer.MAX_VALUE - 1, 0});
 	}
 
-	public int[] checkArgument(String arg, int[] argumentData){
+	/**
+	 * This function is the guts of the error checking for the string inputs
+	 * it will pass through the string looking for either functions, strings 
+	 * or numbers. Upon seeing a function it will call itself to ensure that
+	 * the function has the correct input parameters.
+	 * @param arg The string to be error checked
+	 * @param argumentData an array in the form {start-checking-here, end-checking-here, function-return-type}
+	 * @return This will either print an error message or its return value is only usefull for recusive calls
+	 * @throws Exception 
+	 */
+	public int[] checkArgument(String arg, int[] argumentData) throws Exception{
 		int end;
 		int index = argumentData[0];
 		int type = argumentData[2];
@@ -87,7 +108,15 @@ public class Arborist {
 		}
 	}
 
+	/**
+	 * This function will check a string for errors with checkArgument either grow
+	 * the corresponding tree or throw an exception.
+	 * @param arg The string that grows the tree
+	 * @return returns a parse tree corresponding to the string
+	 * @throws Exception
+	 */
 	public ParseTree growTree(String arg) throws Exception{
+		checkArgument(arg);
 		ParseTree tree = new ParseTree();
 		ArrayList<String> splitArguments = new ArrayList<String>();
 		for (int i = 0; i < arg.length(); i++) {
@@ -114,16 +143,19 @@ public class Arborist {
 		return tree;
 	}
 
+	/**
+	 * Determines if the arborist prints stack traces or not
+	 */
 	public void toggleVerbose() {
 		verbose = !verbose;
 	}
 
 	public static void main(String[] args) throws Exception {
 
-		Arborist amy=new Arborist();
-		String arg = "(add (mult 5 5) (mult 5 5))";
+		Arborist amy=new Arborist(new Information("/Users/alcridla/Documents/Methods.jar", "tests.Methods01"));
+		String arg = "(add (mult 5 5) (mult 5 5)";
 
-		amy.checkArgument(arg, new int[] {0, Integer.MAX_VALUE, 0});
+		amy.growTree(arg);
 		ParseTree tree=amy.growTree(arg);
 		System.out.println(tree.toString());
 	}
