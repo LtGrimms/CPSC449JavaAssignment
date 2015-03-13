@@ -40,7 +40,35 @@ public class Information {
 		Method[] methods = cls.getDeclaredMethods();
 		for (Method m : methods) {
 			String name = m.getName();
-			System.out.println("The method name is " + name);
+			System.out.print("("+ name);
+			// print parameter types   
+			Class[] paramTypes = m.getParameterTypes(); 
+			for (int j = 0; j < paramTypes.length; j++)   { 
+				System.out.print(" "); 
+				if (j > 0) {
+					System.out.print(" ");
+				}
+				String parameter = paramTypes[j].getName();
+				if (parameter.contains(".") ) {
+					int start = parameter.lastIndexOf(".") + 1;
+					int end = parameter.length();
+					String formatted = parameter.substring(start,end).toLowerCase();
+					System.out.print(formatted);
+				}
+				else {
+					System.out.print(paramTypes[j].getName() );
+				}//end else
+			}//end inner-for
+			String returnType = m.getReturnType().toString();
+			if (returnType.contains(".")) {
+				int start = returnType.lastIndexOf(".") + 1;
+				int end = returnType.length();
+				String formatted = returnType.substring(start,end).toLowerCase();
+				System.out.println(")" + " " + ": " + formatted ); 
+			}//end if
+			else {
+				System.out.println(")" + " " + ": " + returnType ); 
+			}//end else
 		}
 		
 	}
@@ -50,25 +78,73 @@ public class Information {
 		for (Method m : ms) {
 			if (m.getName().equals(methodName)) {
 				//return type block
-				if (m.getReturnType().toString() == "String") {
+				//System.out.println("The method exists");
+				String returnType = m.getReturnType().toString();
+				if (returnType.contains(".")) {
+					int start = returnType.lastIndexOf(".") + 1;
+					int end = returnType.length();
+					String formatted = returnType.substring(start,end).toLowerCase();
+					//System.out.println("The formatted " + formatted);
+					if (formatted.equals("string")) {
+						//System.out.println("formatted reach");
+						properArguments.add(001);
+					}
+					else if (formatted.equals("float")) {
+						properArguments.add(100);
+					}
+					else if (formatted.equals("int") ) {
+						properArguments.add(110);
+					}
+					else if (formatted.equals("integer") ) {
+						properArguments.add(110);
+					}
+				}
+				//will never be reach but just in case
+				if (m.getReturnType().toString().equals("String")) {
+					System.out.println("formatted reach");
 					properArguments.add(001);
 				}
-				else if (m.getReturnType().toString() == "float") {
+				else if (m.getReturnType().toString().equals("float") ){
 					properArguments.add(100);
 				}
-				else if (m.getReturnType().toString() == "int") {
+				else if (m.getReturnType().toString().equals("int") ){
 					properArguments.add(110);
 				}
+				else if (m.getReturnType().toString().equals("Integer") ){
+					properArguments.add(110);
+				} 
 				//parameter block
 				Class[] paramTypes = m.getParameterTypes();
 				for (int j = 0; j < paramTypes.length; j++) {
-					if (paramTypes[j].getName() == "String") {
+					String parameter = paramTypes[j].getName();
+					if (parameter.contains(".") ){
+						int start = parameter.lastIndexOf(".") + 1;
+						int end = parameter.length();
+						String formatted = parameter.substring(start,end).toLowerCase();
+						if (formatted.equals("string")) {
+							properArguments.add(001);
+						}
+						else if (formatted.equals("float")) {
+							properArguments.add(100);
+						}
+						else if (formatted.equals("int") ) {
+							properArguments.add(110);
+						}
+						else if (formatted.equals("integer") ) {
+							properArguments.add(110);
+						}
+						}//end parameter contains
+					//never gonna reach it unless shit happens
+					if (paramTypes[j].getName().equals("String")) {
 						properArguments.add(001);
 					}
-					else if (paramTypes[j].getName() == "float") {
+					else if (paramTypes[j].getName().equals("float") ){
 						properArguments.add(100);
 					}
-					else if (paramTypes[j].getName() == "int") {
+					else if (paramTypes[j].getName().equals("int") ){
+						properArguments.add(110);
+					}
+					else if (paramTypes[j].getName().equals("Integer") ){
 						properArguments.add(110);
 					}
 				}//end for 
@@ -79,4 +155,7 @@ public class Information {
 		}//end for
 		return properArguments;
 	}//end method 
+	public static Class getClassName() {
+		return cls;
+	}//end method
 }
