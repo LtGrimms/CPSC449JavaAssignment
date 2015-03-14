@@ -3,6 +3,7 @@ package org;
 import java.text.ParseException;
 import java.util.ArrayList;
 
+import utils.ErrorUtils;
 import utils.ParsingUtils;
 
 public class Arborist {
@@ -18,26 +19,9 @@ public class Arborist {
 	 * Creates an arborist class with specific method data
 	 * @param info The method data that this arborist will use
 	 */
-	public Arborist(Information info) {
+	public Arborist(Information info, boolean verbose) {
 		this.info = info;
-	}
-
-	/**
-	 * All non-fatal errors should call this function.
-	 * @param arg The string being parsed
-	 * @param error An explanation of the error
-	 * @param ex The ParseException with the index of the parse error
-	 */
-	private void parseError(String arg, String error,ParseException ex){
-		//ask
-		System.out.println(error+" at offest "+ex.getErrorOffset());
-		System.out.println(arg);
-		for(int i=0;i<ex.getErrorOffset();i++){
-			System.out.print("-");
-		}
-		System.out.print("^\n");
-		if(verbose)
-			ex.printStackTrace();
+		this.verbose = verbose;
 	}
 
 	/**
@@ -73,12 +57,12 @@ public class Arborist {
 			end = ParsingUtils.findClosingBracket(arg, index);				
 			if (end > argumentData[1]) {
 				ParseException ex=new ParseException("could not find closing bracket",index);
-				parseError(arg,"could not find closing bracket",ex);
+				ErrorUtils.parseError(arg,"could not find closing bracket",ex,verbose);
 			}
 			String function = ParsingUtils.nextWord(arg, index + 1);		
 			if(!info.checkForFunction(function)){
 				ParseException ex=new ParseException("could not find function.",index);
-				parseError(arg,"could not find function.",ex);
+				ErrorUtils.parseError(arg,"could not find function.",ex,verbose);
 			}
 			int nextIndex = index + function.length() + 1;									
 			ArrayList<Integer> argTypes = new ArrayList<Integer>();
@@ -90,7 +74,7 @@ public class Arborist {
 			type = ParsingUtils.checkForProperArguments(function, argTypes);
 			if (type == 0){
 				ParseException ex=new ParseException("Something had the wrong type",index);
-				parseError(arg,"Something had the wrong type",ex);
+				ErrorUtils.parseError(arg,"Something had the wrong type",ex,verbose);
 			}
 
 			return new int[] {index,end,type};
@@ -152,8 +136,8 @@ public class Arborist {
 
 	public static void main(String[] args) throws Exception {
 
-		Arborist amy=new Arborist(new Information("/Users/alcridla/Documents/Methods.jar", "tests.Methods01"));
-		String arg = "(add (mult 5 5) (mult 5 5)";
+		Arborist amy=new Arborist(new Information("/Users/alcridla/Documents/Methods.jar", "tests.Methods01"), false);
+		String arg = "\"hello\"";
 
 		amy.growTree(arg);
 		ParseTree tree=amy.growTree(arg);
