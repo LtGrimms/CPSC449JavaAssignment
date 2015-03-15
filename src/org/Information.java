@@ -72,9 +72,10 @@ public class Information {
 		}
 		
 	}
-	public static ArrayList<Integer> properArguments(String methodName) {
-		ArrayList<Integer> properArguments = new ArrayList<Integer>();
+	public static List<List<Integer>> properArguments(String methodName) {
+		List<List<Integer>> properArguments = new ArrayList<List<Integer>>(); 
 		List<Method> ms = Arrays.asList(cls.getMethods());
+		List<Integer> myList = new ArrayList<Integer>();
 		for (Method m : ms) {
 			if (m.getName().equals(methodName)) {
 				//return type block
@@ -87,31 +88,31 @@ public class Information {
 					//System.out.println("The formatted " + formatted);
 					if (formatted.equals("string")) {
 						//System.out.println("formatted reach");
-						properArguments.add(001);
+						myList.add(001);
 					}
 					else if (formatted.equals("float")) {
-						properArguments.add(100);
+						myList.add(100);
 					}
 					else if (formatted.equals("int") ) {
-						properArguments.add(110);
+						myList.add(110);
 					}
 					else if (formatted.equals("integer") ) {
-						properArguments.add(110);
+						myList.add(110);
 					}
 				}
 				//will never be reach but just in case
-				if (m.getReturnType().toString().equals("String")) {
+				else if (m.getReturnType().toString().equals("String")) {
 					System.out.println("formatted reach");
-					properArguments.add(001);
+					myList.add(001);
 				}
 				else if (m.getReturnType().toString().equals("float") ){
-					properArguments.add(100);
+					myList.add(100);
 				}
 				else if (m.getReturnType().toString().equals("int") ){
-					properArguments.add(110);
+					myList.add(110);
 				}
 				else if (m.getReturnType().toString().equals("Integer") ){
-					properArguments.add(110);
+					myList.add(110);
 				} 
 				//parameter block
 				Class[] paramTypes = m.getParameterTypes();
@@ -122,36 +123,37 @@ public class Information {
 						int end = parameter.length();
 						String formatted = parameter.substring(start,end).toLowerCase();
 						if (formatted.equals("string")) {
-							properArguments.add(001);
+							myList.add(001);
 						}
 						else if (formatted.equals("float")) {
-							properArguments.add(100);
+							myList.add(100);
 						}
 						else if (formatted.equals("int") ) {
-							properArguments.add(110);
+							myList.add(110);
 						}
 						else if (formatted.equals("integer") ) {
-							properArguments.add(110);
+							myList.add(110);
 						}
 						}//end parameter contains
 					//never gonna reach it unless shit happens
-					if (paramTypes[j].getName().equals("String")) {
-						properArguments.add(001);
+					else if (paramTypes[j].getName().equals("String")) {
+						myList.add(001);
 					}
 					else if (paramTypes[j].getName().equals("float") ){
-						properArguments.add(100);
+						myList.add(100);
 					}
 					else if (paramTypes[j].getName().equals("int") ){
-						properArguments.add(110);
+						myList.add(110);
 					}
 					else if (paramTypes[j].getName().equals("Integer") ){
-						properArguments.add(110);
+						myList.add(110);
 					}
+					
 				}//end for 
 
 			}//end if 
 			
-		
+		properArguments.add(myList);
 		}//end for
 		return properArguments;
 	}//end method 
