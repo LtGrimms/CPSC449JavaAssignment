@@ -71,6 +71,10 @@ public class ParseTree {
 	public boolean isComplete() {
 		return root.isComplete();
 	}
+	
+	public Node getRoot() {
+		return root;		
+	}
 	/**
 	 * Add return type of node on parseTree
 	 * @throws Exception
@@ -187,6 +191,15 @@ public class ParseTree {
 		public int getReturnType() {
 			return returnType;
 		}
+		
+		/**
+		 * get Children
+		 * @return Linked list of children of node
+		 */
+		public LinkedList<Node> getChildren() {
+			return children;
+		}
+		
 		/**
 		 * make children of the node
 		 * @param st user's command

@@ -18,7 +18,7 @@ public class TreeEvaluator {
 	private Class coms;
 	
 	public TreeEvaluator() throws NoSuchMethodException, SecurityException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, ClassNotFoundException, IOException{
-		File f = new File("C:\\Users\\Desmond\\Documents\\School\\CPSC449\\JavaAssignment\\CPSC449JavaAssignment\\src\\org\\commands.jar");
+		File f = new File("D:\\Desmond\\CPSC449\\commands.jar");
 		Class[] parameterTypes = new Class[]{URL.class};
 		URL url = (f.toURI()).toURL();
 		URLClassLoader sysloader = (URLClassLoader) ClassLoader.getSystemClassLoader();
@@ -52,22 +52,22 @@ public class TreeEvaluator {
 		
 	}
 	
-	public Object evaluate(Node root){
+	public Object evaluate(Node root) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException{
 		Object [] args;
 		args = new Object[5];
 		int i= 0;
 		Object result;
 		Node nxt;
-		Object fun;
-		
-		if (root.getVariableType() == Integer.class) {
-				fun = Integer.parseInt(root.getValue());
+		String fun;
+		fun = root.getValue();
+		if (root.getReturnType() == 0) {
+				//fun = Integer.parseInt(root.getValue());
 			}
-		else if (root.getVariableType() == Float.class) {
-				fun = Float.parseFloat(root.getValue());
+		else if (root.getReturnType() == 1) {
+				//fun = Float.parseFloat(root.getValue());
 			}
 		else{
-				fun = root.getValue().replace("\"","");
+				//fun = root.getValue().replace("\"","");
 			}
 		
 		
@@ -86,9 +86,9 @@ public class TreeEvaluator {
 		
 	
 		
-		result = root.getMethod().invoke(coms, (Object)args); 
+		result = coms.getMethod(fun, (Class[]) args).invoke(coms, args); 
 
-		
+		result = null;
 		return result;
 	}
 	
@@ -105,6 +105,6 @@ public class TreeEvaluator {
 		tree.grow("5");
 		tree.grow("5");
 		System.out.println(tree.isComplete());
-		String c = e.evaluate(tree.getRoot());
+		Object c = e.evaluate(tree.getRoot());
 	}
 }
