@@ -92,7 +92,7 @@ public class Interpereter {
 	 * @param args
 	 * @throws Exception
 	 */
-	public static void main(String[] args) throws Exception {
+	public static void main(String[] args) {
 
 		//TODO Still need to ask about the error with exit code -4 since  I don't think 
 		//TODO the loop below will catch it though it could with minor mods
@@ -174,11 +174,13 @@ public class Interpereter {
 			
 			ParseTree tree = null;
 			try {
-			tree = arborist.checkArgument(argument);
-			tree.addReturnTypes();
-			String output = tree.toString(); //eval.evaluateTree(tree);
-			System.out.println(output);
+				tree = arborist.checkArgument(argument);
+				tree.addReturnTypes();
+				String output = tree.toString(); //eval.evaluateTree(tree);
+				System.out.println(output);
 			} catch (ParseException ex) {
+			} catch (Exception ex) {
+				ex.printStackTrace(); //comment out for grading
 			}
 			
 			//in.close(); //not sure why but this causes an error

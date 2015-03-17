@@ -1,3 +1,5 @@
+package org;
+
 /*References
  * https://www.youtube.com/watch?v=agnblS47F18
  * http://stackoverflow.com/questions/194698/how-to-load-a-jar-file-at-runtime
@@ -25,18 +27,18 @@ public class Information {
 			e.printStackTrace();
 		}
 	}
-	public static boolean checkForFunction(String methodName) throws Exception{
+	public static boolean checkForFunction(String methodName){
 		List<Method> ms = Arrays.asList(cls.getMethods());
 		for (Method m : ms) {
 			if (m.getName().equals(methodName)) {
-				System.out.println("The method exists");
+				//System.out.println("The method exists");
 				return true;
 			}
 		}
-		System.err.println("The method does not exists");
+		//System.err.println("The method does not exists");
 		return false;
 	}//end method
-	public static void printFunctions () throws Exception{
+	public static void printFunctions (){
 		Method[] methods = cls.getDeclaredMethods();
 		for (Method m : methods) {
 			String name = m.getName();

@@ -19,6 +19,7 @@ public class Arborist {
 	/**
 	 * Creates an arborist class with specific method data
 	 * @param info The method data that this arborist will use
+	 * @param verbose decide if the arborist starts in verbose mode (true) or not (false)
 	 */
 	public Arborist(Information info, boolean verbose) {
 		this.info = info;
@@ -28,11 +29,11 @@ public class Arborist {
 	/**
 	 * This function simultaneously checks a string for errors and grows an appropriate parse tree.
 	 * The function will complete without error iff the input string was valid with respect to the
-	 * reflection data. (double check that)
+	 * reflection data. (double check that, seems to be true)
 	 * @param arg The string to check for errors and attempt to grow
 	 * @throws Exception parse exceptions are thrown if the string is invalid
 	 */
-	public ParseTree checkArgument(String arg) throws Exception{
+	public ParseTree checkArgument(String arg) throws ParseException{
 		tree = new ParseTree(info);
 		checkArgument(arg, new int[] {0, Integer.MAX_VALUE - 1, 0});
 		return tree;
@@ -48,7 +49,7 @@ public class Arborist {
 	 * @return This will either print an error message or do nothing. Its return value is only usefull for recusive calls
 	 * @throws Exception invalid strings will throw parse errors
 	 */
-	public int[] checkArgument(String arg, int[] argumentData) throws Exception{
+	public int[] checkArgument(String arg, int[] argumentData) throws ParseException{
 		int end;
 		int index = argumentData[0];
 		int type = argumentData[2];
@@ -97,7 +98,7 @@ public class Arborist {
 	 * @return same as in checkArgument, only usefull for recursive calls
 	 * @throws Exception parse exceptions are throw for invalid strings.
 	 */
-	private int[] checkFunction(String arg, int[] argumentData) throws Exception {
+	private int[] checkFunction(String arg, int[] argumentData) throws ParseException {
 		int index = argumentData[0];
 		int end = argumentData[1];
 		int type = argumentData[2];
