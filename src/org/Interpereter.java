@@ -1,6 +1,7 @@
 package org;
 
 import java.nio.file.Path;
+import java.text.ParseException;
 import java.util.Scanner;
 
 import utils.ErrorUtils;
@@ -53,7 +54,7 @@ public class Interpereter {
 	 * first character
 	 * @param arg the string to be checked for qualifiers
 	 * @param qualifiers a boolean array representing whether or not help and verbose have been found
-	 * @return
+	 * @return a boolean array of length two where the first element is help and the second is verbose and true values represent help/verbose have been activated by qualifiers
 	 */
 	private static boolean[] checkQualifiers(String arg, boolean[] qualifiers) {
 		arg = arg.toLowerCase();
@@ -83,11 +84,21 @@ public class Interpereter {
 			return newQualifiers;
 	}
 	
+	/**
+	 * The main loop has two parts, the first considers the input parameters and determines if help and/or
+	 * verbose has been called and tries to determine the jar file and method class that the arguments want
+	 * loaded into the interpreter. The second part uses java reflection to interpret commands form an input 
+	 * stream .
+	 * @param args
+	 * @throws Exception
+	 */
 	public static void main(String[] args) throws Exception {
 
-		// Still need to ask about the error with exit code -4 since  I don't think 
-		// the loop below will catch it though it could with minor mods
+		//TODO Still need to ask about the error with exit code -4 since  I don't think 
+		//TODO the loop below will catch it though it could with minor mods
+		//TODO Create control structure that will load the jar.
 
+		//__________________________________PART 1: check input params______________________________________
 		String jar = null;
 		String methodsClass = null;
 		boolean[] qualifiers = {false, false};
@@ -126,9 +137,7 @@ public class Interpereter {
 		
 		
 		
-		// ------ Basic loop that runs program ----------
-		// Assuming that the 'path' variable is correctly checked (is there two path variables?)
-		// then we can build an information class and pass this into the arborist and evaluator.
+		//___________________________________PART 2: Run an Interpreter_____________________________________
 		
 		Information info = new Information(jar, methodsClass); // Needs to exit with code -6 if method class cannot be found and exit code -5 if jar cannot be loaded
 		Arborist arborist = new Arborist(info, verb);
@@ -138,6 +147,9 @@ public class Interpereter {
 			Scanner in = new Scanner(System.in);
 			System.out.print("> ");
 			String argument = in.nextLine();
+			
+			if (argument.length() == 0)
+				continue;
 			
 			boolean lengthOne = argument.length() == 1;
 			char firstChar = argument.charAt(0);
@@ -160,9 +172,14 @@ public class Interpereter {
 				System.exit(0);
 			}
 			
-			ParseTree tree = arborist.growTree(argument);
+			ParseTree tree = null;
+			try {
+			tree = arborist.checkArgument(argument);
+			tree.addReturnTypes();
 			String output = tree.toString(); //eval.evaluateTree(tree);
 			System.out.println(output);
+			} catch (ParseException ex) {
+			}
 			
 			//in.close(); //not sure why but this causes an error
 		}
