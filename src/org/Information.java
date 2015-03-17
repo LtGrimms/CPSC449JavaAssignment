@@ -88,31 +88,31 @@ public class Information {
 					//System.out.println("The formatted " + formatted);
 					if (formatted.equals("string")) {
 						//System.out.println("formatted reach");
-						myList.add(001);
+						myList.add(1);
 					}
 					else if (formatted.equals("float")) {
-						myList.add(100);
+						myList.add(4);
 					}
 					else if (formatted.equals("int") ) {
-						myList.add(110);
+						myList.add(6);
 					}
 					else if (formatted.equals("integer") ) {
-						myList.add(110);
+						myList.add(6);
 					}
 				}
 				//will never be reach but just in case
 				else if (m.getReturnType().toString().equals("String")) {
 					System.out.println("formatted reach");
-					myList.add(001);
+					myList.add(1);
 				}
 				else if (m.getReturnType().toString().equals("float") ){
-					myList.add(100);
+					myList.add(4);
 				}
 				else if (m.getReturnType().toString().equals("int") ){
-					myList.add(110);
+					myList.add(6);
 				}
 				else if (m.getReturnType().toString().equals("Integer") ){
-					myList.add(110);
+					myList.add(6);
 				} 
 				//parameter block
 				Class[] paramTypes = m.getParameterTypes();
@@ -123,30 +123,30 @@ public class Information {
 						int end = parameter.length();
 						String formatted = parameter.substring(start,end).toLowerCase();
 						if (formatted.equals("string")) {
-							myList.add(001);
+							myList.add(1);
 						}
 						else if (formatted.equals("float")) {
-							myList.add(100);
+							myList.add(4);
 						}
 						else if (formatted.equals("int") ) {
-							myList.add(110);
+							myList.add(6);
 						}
 						else if (formatted.equals("integer") ) {
-							myList.add(110);
+							myList.add(6);
 						}
 						}//end parameter contains
 					//never gonna reach it unless shit happens
 					else if (paramTypes[j].getName().equals("String")) {
-						myList.add(001);
+						myList.add(1);
 					}
 					else if (paramTypes[j].getName().equals("float") ){
-						myList.add(100);
+						myList.add(4);
 					}
 					else if (paramTypes[j].getName().equals("int") ){
-						myList.add(110);
+						myList.add(6);
 					}
 					else if (paramTypes[j].getName().equals("Integer") ){
-						myList.add(110);
+						myList.add(6);
 					}
 					
 				}//end for 
