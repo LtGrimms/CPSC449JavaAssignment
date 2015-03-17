@@ -12,18 +12,20 @@ import utils.ParsingUtils;
 public class ParseTree {
 
 	private Node root;
-	private Information info;
+	private static Information info;
 
 	/**
-	 * Constructor which initialize root of tree
+	 * Constructor gives the tree the correct reflection data
 	 */
-	public ParseTree() {
+	public ParseTree(Information info) {
+		this.info = info;
 		root = null;
 	}
 
 	/**
-	 * Grow tree
-	 * @param st String about user's command
+	 * Grows a tree by recursively calling the private grow function on successive nodes
+	 * @param st The value to ultimately give the new node
+	 * @param numberOfChildren the number of children allowed for the new node
 	 */
 	public void grow(String st, int numberOfChildren) {
 		if (root == null)   {                    // add to empty tree
@@ -34,14 +36,14 @@ public class ParseTree {
 			grow(st, numberOfChildren, root);
 	}
 	/**
-	 * Grow tree if the tree has root and make node from user's command
-	 * check if the node has two children
-	 * @param st String about user's command
-	 * @param node Root of parseTree
+	 * Recursively grow a tree by finding the first incomplete node and adding a child.
+	 * @param st The value to be given to the new node
+	 * @param numberOfChildren the number of children allowed for the new node
+	 * @param node the potential parent of the new node
 	 */
 	private void grow(String st, int numberOfChildren, Node node) {
-		if (node.isComplete())
-			throw new IllegalArgumentException(); // too many arguments to root node
+//		if (node.isComplete())
+//			throw new IllegalArgumentException(); // too many arguments to root node NEVER HAPPENS
 
 		boolean grown = false;
 
@@ -65,48 +67,72 @@ public class ParseTree {
 
 	}
 	/**
-	 * check the root of tree is complete
-	 * @return root is complete or not
-	 */
-	public boolean isComplete() {
-		return root.isComplete();
-	}
-	
-	public Node getRoot() {
-		return root;		
-	}
-	/**
-	 * Add return type of node on parseTree
-	 * @throws Exception
+	 * Once a tree is complete this function will add the return types to the nodes in the tree so
+	 * we know the data types each node will return.
+	 * @throws Exception when this is called on an incomplete tree
 	 */
 	public void addReturnTypes() throws Exception {
 		if (!isComplete())
-			throw new Exception("tried to add return types to an incomplete tree");
-
+			throw new Exception("tried to add return types to an incomplete tree"); //shouldn't happen?
+	
 		addReturnType(root);
 	}
-	/**
-	 * Check the node is function or not 
-	 * If the node is function, check children of the node
-	 * @param node Node of parseTree
-	 * @return Type of node
-	 */
-	private int addReturnType(Node node){
 
+	/**
+	 * Adds return types to nodes by first determining if they represent functions or values. If they
+	 * are functions the return type is determined by the return types of their children and the reflection
+	 * data. If they are values they are represented as integers
+	 * @param node the node whose return type is being determined
+	 * @return the return type of this node
+	 * @throws Exception NOT NEEDED (JASONS)
+	 */
+	private int addReturnType(Node node) throws Exception {
+	
 		int type = returnType(node.getValue());
-		if (type == 1000) {
+		if (type == 8) {
 			ArrayList<Integer> arguments = new ArrayList<Integer>();
 			for (Node child : node.children) {
 				arguments.add(addReturnType(child));
 			}
-			type = ParsingUtils.checkForProperArguments(node.getValue(), arguments);
+			type += ParsingUtils.checkForProperArguments(node.getValue(), arguments);
 			node.setReturnType(type);
 			return type;
 		} else {
 			node.setReturnType(type);
 			return type;
 		}
-	}	
+	}
+
+	/**
+	 * Check whether a node is function call, String, Integer or Float
+	 * @param arg the string representing a function call, Integer, String or Float
+	 * @return Type of argument as an integer representation
+	 * @throws Exception NOT NEEDED (JASONS)
+	 */
+	private static int returnType(String arg) throws Exception {
+		if (arg.charAt(0) == '\"')
+			return 1;
+		else if (info.checkForFunction(arg))  //check for function throws exception
+			return 8;
+		else return ParsingUtils.intOrFloat(arg, 0);
+	}
+
+	/**
+	 * The tree is complete iff the root is complete
+	 * @return root is complete or not
+	 */
+	public boolean isComplete() {
+		return root.isComplete();
+	}
+	
+	/**
+	 * returns the trees root
+	 * @return the root
+	 */
+	public Node getRoot() {
+		return root;		
+	}
+	
 	/**
 	 * Print the parseTree
 	 */
@@ -118,16 +144,16 @@ public class ParseTree {
 		return result;
 	}
 	/**
-	 * Build string from parsTree
-	 * @param node Root of tree
-	 * @return user's command
+	 * Build string from parseTree by recursively looking through from the root down.
+	 * @param node current node being examined in recursive calls
+	 * @return a string representation of the node
 	 */
 	private String buildString(Node node) {
 		String value;
-		if (node.getReturnType() == 1000) {
-			value = "(" + node.getValue() + "; " + node.getReturnType() + " ";
+		if ((node.getReturnType() & 8) == 8) {
+			value = "(" + node.getValue() + ":" + node.getReturnType() + " ";
 		} else {
-			value = node.getValue() + ", " + node.getReturnType() + " ";
+			value = node.getValue() + ":" + node.getReturnType() + " ";
 		}
 		String append = "";
 
@@ -141,23 +167,11 @@ public class ParseTree {
 		return value + append;
 	}
 	/**
-	 * Check whether argument is function or string or Integer or Float
-	 * @param arg User's command
-	 * @return Type of argument
-
-	 */
-	private static int returnType(String arg) {
-		if (arg.charAt(0) == '\"')
-			return 1;
-		else if (/* info.checkForFunction(arg) */ arg == "add")  //check for function throws exception
-			return 1000;
-		else return ParsingUtils.intOrFloat(arg, 0);
-	}
-
-	/**
-	 * 
+	 * Parse Trees are nodes with pointers to their children and their parent. Each node also carries it's 
+	 * returnType which is an integer that represents if the node is a function, Integer, Float or String. 
+	 * They may also represent functions that return Integers, Floats or Strings. Each node is either 
+	 * complete or not based on the number of children it has.
 	 * @author Anthony,Jihyun,Desdmond,Jason,Justin
-	 *Class about node of parsTree
 	 */
 	protected class Node {
 		private Node parent;
@@ -168,9 +182,10 @@ public class ParseTree {
 		private boolean complete = false;
 
 		/**
-		 * link the parent to children
-		 * @param st
-		 * @param parent
+		 * Create a new node with no children and a pointer to the parent
+		 * @param st The string value to be held by the node
+		 * @param numberOfChildren The node will be complete once it has this many children
+		 * @param parent a pointer to the nodes parent
 		 */
 		public Node(String st, int numberOfChildren, Node parent) {
 			this.parent = parent;
@@ -181,13 +196,13 @@ public class ParseTree {
 		}
 		/**
 		 * set returnType of node to type
-		 * @param type
+		 * @param type int representation of the return type
 		 */
 		public void setReturnType(int type) {
 			returnType = type;
 		}
 		/**
-		 * get returnType
+		 * gets an integer representation of the returnType
 		 * @return Type of node
 		 */
 		public int getReturnType() {
@@ -203,8 +218,11 @@ public class ParseTree {
 		}
 		
 		/**
-		 * make children of the node
-		 * @param st user's command
+		 * Add a child to the node. Each call to add child will determine if the new child is complete
+		 * and, if so, determine if the parent is now complete and, if so, determine if the parent is
+		 * complete and, if so....
+		 * @param st The value held in the new node
+		 * @param numberOfChildren the number of children the new node needs to be complete
 		 */
 		public void addChild(String st, int numberOfChildren) {
 			Node child = new Node(st, numberOfChildren, this);
@@ -227,46 +245,19 @@ public class ParseTree {
 		}
 		
 		/**
-		 * check the node is right word and make variable 'complete' of node true
-		 * check all nodes of parseTree are complete or not 
+		 * See if the node has the right number of children and set its completeness variable. If
+		 * the node is complete check it will automaticly check and set the parents completness.
 		 */
 		public void checkCompleteness() {
-			// Need to write this
-			// depends on reflection data
-			// check 2 things
-			//  1. Does this node have the right number of children
-			//  2. Are the children complete
-
-			// the following is an ad-hoc implementation of checkCompleteness that allows each node to have only two children
-
 			if (children.size() == numberOfChildren)
 				complete = true;
 			
 			if (complete && parent != null) parent.checkCompleteness();
-			
-			
-//			boolean digit = true;
-//			for (int i = 0; i < value.length(); i++) {
-//				if (!(Character.isDigit(value.charAt(i)) || value.charAt(i) == '.'))
-//					digit = false;
-//			}
-//			if (digit || value == "\"hello there\"" || value == "\"world\"")
-//				complete = true;
-//
-//			if (children.size() == 2) {
-//				for (Node child : children){
-//					if (!child.isComplete())
-//						return;
-//				}
-//				complete = true;
-//			}
-//
-//			if (complete && parent != null) parent.checkCompleteness();
 		}
 	}
 
 	public static void main(String[] args) throws Exception {
-		ParseTree tree = new ParseTree();
+		ParseTree tree = new ParseTree(new Information("/Users/alcridla/Documents/Methods.jar", "tests.Methods01"));
 
 //		tree.grow("add", 2);
 //		tree.grow("5", 0);
