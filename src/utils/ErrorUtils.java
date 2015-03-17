@@ -39,8 +39,9 @@ public class ErrorUtils {
 	 * @param arg The string being parsed
 	 * @param error An explanation of the error
 	 * @param ex The ParseException with the index of the parse error
+	 * @throws ParseException we have already printed a stack trace so don't put it in the catch block
 	 */
-	public static void parseError(String arg, String error,ParseException ex, boolean verbose){
+	public static void parseError(String arg, String error,ParseException ex, boolean verbose) throws ParseException{
 		System.out.println(error+" at offest "+ex.getErrorOffset());
 		System.out.println(arg);
 		for(int i=0;i<ex.getErrorOffset();i++){
@@ -49,6 +50,7 @@ public class ErrorUtils {
 		System.out.print("^\n");
 		if(verbose)
 			ex.printStackTrace();
+		throw ex;
 	}
 	
 }
