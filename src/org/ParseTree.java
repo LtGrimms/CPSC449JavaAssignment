@@ -25,13 +25,13 @@ public class ParseTree {
 	 * Grow tree
 	 * @param st String about user's command
 	 */
-	public void grow(String st) {
+	public void grow(String st, int numberOfChildren) {
 		if (root == null)   {                    // add to empty tree
-			root = new Node(st, null);
+			root = new Node(st, numberOfChildren, null);
 			root.checkCompleteness();
 		}
 		else
-			grow(st, root);
+			grow(st, numberOfChildren, root);
 	}
 	/**
 	 * Grow tree if the tree has root and make node from user's command
@@ -39,28 +39,28 @@ public class ParseTree {
 	 * @param st String about user's command
 	 * @param node Root of parseTree
 	 */
-	private void grow(String st, Node node) {
+	private void grow(String st, int numberOfChildren, Node node) {
 		if (node.isComplete())
 			throw new IllegalArgumentException(); // too many arguments to root node
 
 		boolean grown = false;
 
 		if (node.children.isEmpty()) {
-			node.addChild(st);
+			node.addChild(st, numberOfChildren);
 			grown = true;
 		} else {
 			Iterator<Node> iter = node.children.listIterator();
 			while (iter.hasNext()) {
 				Node child = (Node) iter.next();
 				if (!child.isComplete()) {
-					grow(st, child);
+					grow(st, numberOfChildren, child);
 					grown = true;
 				}
 			}
 		}
 
 		if (!grown) {
-			node.addChild(st);
+			node.addChild(st, numberOfChildren);
 		}
 
 	}
@@ -158,6 +158,7 @@ public class ParseTree {
 	protected class Node {
 		private Node parent;
 		private LinkedList<Node> children;
+		private int numberOfChildren;
 		private String value;
 		private int returnType;
 		private boolean complete = false;
@@ -167,9 +168,10 @@ public class ParseTree {
 		 * @param st
 		 * @param parent
 		 */
-		public Node(String st, Node parent) {
+		public Node(String st, int numberOfChildren, Node parent) {
 			this.parent = parent;
 			value = st;
+			this.numberOfChildren = numberOfChildren;
 			children = new LinkedList<Node>();
 			//this.checkCompleteness();
 		}
@@ -191,8 +193,8 @@ public class ParseTree {
 		 * make children of the node
 		 * @param st user's command
 		 */
-		public void addChild(String st) {
-			Node child = new Node(st, this);
+		public void addChild(String st, int numberOfChildren) {
+			Node child = new Node(st, numberOfChildren, this);
 			children.add(child);
 			child.checkCompleteness();
 		}
@@ -224,39 +226,39 @@ public class ParseTree {
 
 			// the following is an ad-hoc implementation of checkCompleteness that allows each node to have only two children
 
-			boolean digit = true;
-			for (int i = 0; i < value.length(); i++) {
-				if (!(Character.isDigit(value.charAt(i)) || value.charAt(i) == '.'))
-					digit = false;
-			}
-			if (digit || value == "\"hello there\"" || value == "\"world\"")
+			if (children.size() == numberOfChildren)
 				complete = true;
-
-			if (children.size() == 2) {
-				for (Node child : children){
-					if (!child.isComplete())
-						return;
-				}
-				complete = true;
-			}
-
+			
 			if (complete && parent != null) parent.checkCompleteness();
+			
+			
+//			boolean digit = true;
+//			for (int i = 0; i < value.length(); i++) {
+//				if (!(Character.isDigit(value.charAt(i)) || value.charAt(i) == '.'))
+//					digit = false;
+//			}
+//			if (digit || value == "\"hello there\"" || value == "\"world\"")
+//				complete = true;
+//
+//			if (children.size() == 2) {
+//				for (Node child : children){
+//					if (!child.isComplete())
+//						return;
+//				}
+//				complete = true;
+//			}
+//
+//			if (complete && parent != null) parent.checkCompleteness();
 		}
 	}
 
 	public static void main(String[] args) throws Exception {
 		ParseTree tree = new ParseTree();
 
-		String s1 = "add";
-		String s2 = "5";
-		String s3 = "5";
-		String[] array = {s1, s2, s3};
-		for (int i = 0; i < array.length; i++)
-			tree.grow(array[i]);
-		//		tree.grow("add");
-		//		tree.grow("5");
-		//		tree.grow("5");
-		tree.addReturnTypes();
+//		tree.grow("add", 2);
+//		tree.grow("5", 0);
+		tree.grow("5", 0);
 		System.out.println(tree.toString());
+		System.out.println(tree.isComplete());
 	}
 }
