@@ -27,10 +27,10 @@ public final class ParsingUtils {
 		//		{returnTypeSignature, parameter1TypeSignature, parameter2TypeSignature, ...}
 		// call this array list properArguments
 		ArrayList<Integer[]> properArguments = new ArrayList<Integer[]>();
-		properArguments.add(new Integer[] {110, 110, 110});
-		properArguments.add(new Integer[] {100, 100, 100});
-		properArguments.add(new Integer[] {001, 001, 110});
-		properArguments.add(new Integer[] {110, 001});
+		properArguments.add(new Integer[] {6, 6, 6});
+		properArguments.add(new Integer[] {4, 4, 4});
+		properArguments.add(new Integer[] {1, 1, 6});
+		properArguments.add(new Integer[] {6, 1});
 		int returnType = 0;
 
 		ArgumentChecking:
@@ -63,8 +63,8 @@ public final class ParsingUtils {
 		while(i < arg.length()
 			&& arg.charAt(i)!=' '
 			&& arg.charAt(i)!='('
-			&& arg.charAt(i)!=')'
-			&& arg.charAt(i)!='\n'){
+			&& arg.charAt(i)!=')') 
+			{
 			functionName+=arg.charAt(i++);
 		}
 		return functionName;
@@ -74,11 +74,11 @@ public final class ParsingUtils {
 	 * This function returns the index of the next space in a string
 	 * @param arg the string to find a space in
 	 * @param index the place to start looking for spaces
-	 * @return the index of the next space after index 'index'
+	 * @return the index of the next space after index 'index', Integer.MAX_VALUE if none exist
 	 */
 	public static int findNextSpace(String arg, int index) {
 		for (int i = index + 1; i < arg.length(); i ++) {
-			if (arg.charAt(i) == ' ' || arg.charAt(i) == '\n')
+			if (arg.charAt(i) == ' ')
 				return i;
 		}
 
@@ -95,16 +95,15 @@ public final class ParsingUtils {
 	public static int intOrFloat(String arg, int index) {
 		//TODO this function needs to be able to recognize a two decimal error
 		//     for example 5..5 will be recognized as a float
-		int type = 110;
+		int type = 6;
 		for (int i = index; i < arg.length() 
 				&& arg.charAt(i) != ' ' 
-				&& arg.charAt(i) != '\n'
 				&& arg.charAt(i) != ')'; i++) {
 			Character c = arg.charAt(i);
 			if (!(Character.isDigit(c) || c == '.'))
 				return 0;
 			if (c == '.')
-				type = 100&type;
+				type = 4;
 		}
 		return type;
 	}
@@ -115,7 +114,7 @@ public final class ParsingUtils {
 	 * that closes the bracket at index 'startBracket'
 	 * @param arg the string to find a closing bracket in
 	 * @param startBracet the index of the corresponding start bracket
-	 * @return
+	 * @return the index of the corresponding closing quote, Integer.MAX_VALUE if none exist
 	 */
 	public static int findClosingBracket(String arg, int startBracet){
 		int count=1;
@@ -139,7 +138,7 @@ public final class ParsingUtils {
 	 * This function returns the next quote character in the string from te given index
 	 * @param arg The string to look for closing brackets in
 	 * @param index The index of the start bracket
-	 * @return The index of the next bracket
+	 * @return The index of the next bracket, Integer.MAX_VALUE if none exist
 	 */
 	public static int findClosingQuote(String arg, int index){
 		int count=1;
@@ -155,6 +154,18 @@ public final class ParsingUtils {
 			}
 		}
 		return key;
+	}
+
+
+	public static int findEndOfArgument(String arg, int index) {
+		for (int i = index; i < arg.length(); i++) {
+			if (arg.charAt(i) == ' '
+			 || arg.charAt(i) == ')') {
+				return i;
+			}
+		}
+		
+		return arg.length();
 	}
 
 }
