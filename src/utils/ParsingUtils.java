@@ -167,5 +167,32 @@ public final class ParsingUtils {
 		
 		return arg.length();
 	}
+	
+	 public static int numberOfArg(String arg, int start, int end){
+		  int count=1;
+		  int count_quote=1;
+		  int number=0;
+		  
+		  for(int i=start;i<=end;i++){
+		   if(arg.charAt(i)=='('){
+		    count+=1;
+		   }
+		   else if(arg.charAt(i)==')'){
+		    count-=1;
+		   }
+
+		   if(arg.charAt(i)=='\"'){
+		    count_quote+=1;
+		   }
+		   
+		   if(arg.charAt(i)==' '){
+		    if(count%2==0 && count_quote%2==1){
+		     number+=1;
+		    }
+		   }
+		  }
+
+		  return number;
+		 }
 
 }

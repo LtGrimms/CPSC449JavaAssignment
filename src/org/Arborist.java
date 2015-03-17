@@ -49,7 +49,7 @@ public class Arborist {
 	 * @return This will either print an error message or do nothing. Its return value is only usefull for recusive calls
 	 * @throws Exception invalid strings will throw parse errors
 	 */
-	public int[] checkArgument(String arg, int[] argumentData) throws ParseException{
+	private int[] checkArgument(String arg, int[] argumentData) throws ParseException{
 		int end;
 		int index = argumentData[0];
 		int type = argumentData[2];
@@ -108,7 +108,7 @@ public class Arborist {
 			ParseException ex=new ParseException("could not find function " + function, index);
 			ErrorUtils.parseError(arg,"could not find function " + function ,ex,verbose);
 		}
-		int numberOfArguments = 2; //ParsingUtils.numberOfArguments(arg, index, end);
+		int numberOfArguments = ParsingUtils.numberOfArg(arg, index, end);
 		tree.grow(function, numberOfArguments);
 		
 		int nextIndex = index + function.length() + 1;									
@@ -141,7 +141,7 @@ public class Arborist {
 
 		System.out.println(1100 & 1000);
 		ParseTree tree;
-		tree = amy.checkArgument("Hello\"");
+		tree = amy.checkArgument("(add 5 5 6 7 8.0 \"hello there\" 4 \"world order\" 5 4 3)");
 		tree.addReturnTypes();
 		System.out.println(tree);
 	}
