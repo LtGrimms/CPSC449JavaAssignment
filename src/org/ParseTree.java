@@ -94,7 +94,7 @@ public class ParseTree {
 			for (Node child : node.children) {
 				arguments.add(addReturnType(child));
 			}
-			type += ParsingUtils.checkForProperArguments(node.getValue(), arguments);
+			type += ParsingUtils.checkForProperArguments(info.properArguments(node.getValue()), arguments);
 			node.setReturnType(type);
 			return type;
 		} else {
