@@ -53,47 +53,51 @@ public class TreeEvaluator {
 		
 		
 		LinkedList<Node> children = root.getChildren();
-		if (children == null){
-			
-		}
+
 		Iterator<Node> iter = children.listIterator();
+		if (!iter.hasNext()){
+			return fun;
+		}
 		types= new Class[children.size()];
 		args = new Object[children.size()];
+		
 		while (iter.hasNext()) {
 			nxt = iter.next();
-			switch ( nxt.getReturnType() ) {
-				case 1:
+			fun = evaluate(nxt);
+			switch ( nxt.getReturnType() & 7 ) {
+				case 0b1:
 					c=String.class;
+					args[i]=fun.replace("\"","");
 					break;
-				case 100:
-					c=Float.class;
+				case 0b100:
+					c=float.class;
+					args[i]=new Float(Float.parseFloat(fun));
 					break;
-				case 110:
-					c=Integer.class;
-					break;
-				case 1000:
-					c=Integer.class;
+				case 0b110:
+					c=int.class;
+					args[i]=new Integer(Integer.parseInt(fun));
 					break;
 				default:
 					break;
 			}
-			fun = evaluate(nxt);
-			if (root.getReturnType() == 110) {
+			
+/*			if ((nxt.getReturnType() & 7) == 0b110) {
 				args[i]=Integer.parseInt(fun);
 			}
-			else if (root.getReturnType() == 100) {
+			else if ((nxt.getReturnType() & 7) == 0b100) {
 				args[i]=Float.parseFloat(fun);
 			}
 			else{
 				args[i]=fun.replace("\"","");
-			}
+			}*/
 			types[i]=c;
 			i ++;
 			
 		}
+		fun = root.getValue();
 		
-		fun = (String) coms.getMethod(fun,  types).invoke(coms, args); 
 		
+		fun = "" + coms.getMethod(fun, types).invoke(coms, args);
 		return fun;
 	}
 	
@@ -102,9 +106,9 @@ public class TreeEvaluator {
 	/*public static void main(String[] args) throws NoSuchMethodException, SecurityException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, ClassNotFoundException, IOException{
 		
 	}*/ 
-	public static void main(String[] args) throws NoSuchMethodException, SecurityException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, ClassNotFoundException, IOException{
-		ParseTree tree = new ParseTree();
-		File f = new File("~\\Downloads\\commands.jar");
+	public static void main(String[] args) throws Exception{
+		ParseTree tree = new ParseTree(new Information("C:\\Users\\Darkras\\Documents\\CPSC 449\\commands.jar", "Commands"));
+		File f = new File("C:\\Users\\Darkras\\Documents\\CPSC 449\\commands.jar");
 		Class[] parameterTypes = new Class[]{URL.class};
 		URL url = (f.toURI()).toURL();
 		URLClassLoader sysloader = (URLClassLoader) ClassLoader.getSystemClassLoader();
@@ -118,9 +122,10 @@ public class TreeEvaluator {
 		
 		TreeEvaluator e = new TreeEvaluator(c);
 		
-		tree.grow("add");
-		tree.grow("5");
-		tree.grow("5");
+		tree.grow("add",1);
+		tree.grow("5.0",0);
+		tree.grow("5.0",0);
+		tree.addReturnTypes();
 		System.out.println(tree.isComplete());
 		System.out.print(e.evaluate(tree.getRoot()));
 	}
