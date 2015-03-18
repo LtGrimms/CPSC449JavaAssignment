@@ -82,7 +82,7 @@ public class Information {
 			if (m.getName().equals(methodName)) {
 				//return type block
 				//System.out.println("The method exists");
-				String returnType = m.getReturnType().toString();
+/*				String returnType = m.getReturnType().toString();
 				if (returnType.contains(".")) {
 					int start = returnType.lastIndexOf(".") + 1;
 					int end = returnType.length();
@@ -99,7 +99,7 @@ public class Information {
 						myList.add(6);
 					}
 					else if (formatted.equals("integer") ) {
-						myList.add(6);
+						myList.add(8);
 					}
 				}
 				//will never be reach but just in case
@@ -114,12 +114,14 @@ public class Information {
 					myList.add(6);
 				}
 				else if (m.getReturnType().toString().equals("Integer") ){
-					myList.add(6);
-				} 
+					myList.add(8);
+				} */
 				//parameter block
 				Class[] paramTypes = m.getParameterTypes();
 				for (int j = 0; j < paramTypes.length; j++) {
+					
 					String parameter = paramTypes[j].getName();
+					System.out.println(parameter);
 					if (parameter.contains(".") ){
 						int start = parameter.lastIndexOf(".") + 1;
 						int end = parameter.length();
@@ -134,7 +136,7 @@ public class Information {
 							myList.add(6);
 						}
 						else if (formatted.equals("integer") ) {
-							myList.add(6);
+							myList.add(8);
 						}
 						}//end parameter contains
 					//never gonna reach it unless shit happens
@@ -148,15 +150,20 @@ public class Information {
 						myList.add(6);
 					}
 					else if (paramTypes[j].getName().equals("Integer") ){
-						myList.add(6);
+						myList.add(8);
 					}
 					
+					
 				}//end for 
+				properArguments.add(myList);
+				myList = new ArrayList<Integer>();
 
 			}//end if 
 			
-		properArguments.add(myList);
+		
 		}//end for
+		
+		
 		return properArguments;
 	}//end method 
 	public static Class getClassName() {
