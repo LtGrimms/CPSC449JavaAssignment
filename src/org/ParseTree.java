@@ -257,9 +257,9 @@ public class ParseTree {
 	}
 
 	public static void main(String[] args) throws Exception {
-		ParseTree tree = new ParseTree(new Information("/Users/alcridla/Documents/Methods.jar", "tests.Methods01"));
+		ParseTree tree = new ParseTree(new Information("C:\\Users\\Darkras\\Documents\\CPSC 449\\commands.jar", "Commands"));
 
-		tree.grow("add", 0);
+		tree.grow("test", 0);
 		tree.grow("5", 0);
 		tree.grow("5", 0);
 		System.out.println(tree.toString());

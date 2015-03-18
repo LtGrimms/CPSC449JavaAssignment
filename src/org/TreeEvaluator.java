@@ -12,13 +12,15 @@ import java.net.URLClassLoader;
 import java.util.jar.JarFile;
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.List;
 
 public class TreeEvaluator {
 	
 	private Class coms;
+	private Information info;
 	
-	public TreeEvaluator(Class<?> incoms) throws NoSuchMethodException, SecurityException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, ClassNotFoundException, IOException{
-		this.coms = incoms;
+	public TreeEvaluator(Information info) throws NoSuchMethodException, SecurityException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, ClassNotFoundException, IOException{
+		this.coms = info.cls;
 		/*for (Method m : methods)   {   
 			Class retType = m.getReturnType();   
             String name = m.getName();   
@@ -96,8 +98,10 @@ public class TreeEvaluator {
 		}
 		fun = root.getValue();
 		
-		
+
 		fun = "" + coms.getMethod(fun, types).invoke(coms, args);
+
+		
 		return fun;
 	}
 	
@@ -120,11 +124,17 @@ public class TreeEvaluator {
 		Class<?> c = Class.forName("Commands");
 		Method[] methods = c.getDeclaredMethods();
 		
-		TreeEvaluator e = new TreeEvaluator(c);
+		Information test = new Information("C:\\Users\\Darkras\\Documents\\CPSC 449\\commands.jar", "Commands");
+		List<List<Integer>> testList = test.properArguments("add");
+		
+		System.out.println(testList);
+		
+		
+		TreeEvaluator e = new TreeEvaluator(test);
 		
 		tree.grow("add",1);
-		tree.grow("5.0",0);
-		tree.grow("5.0",0);
+		tree.grow("5",0);
+		tree.grow("5",0);
 		tree.addReturnTypes();
 		System.out.println(tree.isComplete());
 		System.out.print(e.evaluate(tree.getRoot()));
