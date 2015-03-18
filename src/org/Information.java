@@ -82,7 +82,7 @@ public class Information {
 			if (m.getName().equals(methodName)) {
 				//return type block
 				//System.out.println("The method exists");
-/*				String returnType = m.getReturnType().toString();
+				String returnType = m.getReturnType().toString();
 				if (returnType.contains(".")) {
 					int start = returnType.lastIndexOf(".") + 1;
 					int end = returnType.length();
@@ -115,7 +115,7 @@ public class Information {
 				}
 				else if (m.getReturnType().toString().equals("Integer") ){
 					myList.add(8);
-				} */
+				} 
 				//parameter block
 				Class[] paramTypes = m.getParameterTypes();
 				for (int j = 0; j < paramTypes.length; j++) {

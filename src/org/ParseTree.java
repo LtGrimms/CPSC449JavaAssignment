@@ -171,7 +171,7 @@ public class ParseTree {
 	 * returnType which is an integer that represents if the node is a function, Integer, Float or String. 
 	 * They may also represent functions that return Integers, Floats or Strings. Each node is either 
 	 * complete or not based on the number of children it has.
-	 * @author Anthony,Jihyun,Desdmond,Jason,Justin
+	 * @author Anthony,Jihyun,Desmond,Jason,Justin
 	 */
 	protected class Node {
 		private Node parent;
@@ -246,7 +246,7 @@ public class ParseTree {
 		
 		/**
 		 * See if the node has the right number of children and set its completeness variable. If
-		 * the node is complete check it will automaticly check and set the parents completness.
+		 * the node is complete check it will automatically check and set the parents completeness.
 		 */
 		public void checkCompleteness() {
 			if (children.size() == numberOfChildren)
