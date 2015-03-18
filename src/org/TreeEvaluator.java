@@ -18,7 +18,7 @@ public class TreeEvaluator {
 	private Class coms;
 	
 	public TreeEvaluator() throws NoSuchMethodException, SecurityException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, ClassNotFoundException, IOException{
-		File f = new File("D:\\Desmond\\CPSC449\\commands.jar");
+		File f = new File("C:\\Users\\Darkras\\Documents\\CPSC 449\\commands.jar");
 		Class[] parameterTypes = new Class[]{URL.class};
 		URL url = (f.toURI()).toURL();
 		URLClassLoader sysloader = (URLClassLoader) ClassLoader.getSystemClassLoader();
@@ -98,12 +98,12 @@ public class TreeEvaluator {
 		
 	}*/ 
 	public static void main(String[] args) throws NoSuchMethodException, SecurityException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, ClassNotFoundException, IOException{
-		ParseTree tree = new ParseTree();
+		ParseTree tree = new ParseTree(new Information("C:\\Users\\Darkras\\Documents\\CPSC 449\\commands.jar", "tests.Methods01"));
 		TreeEvaluator e = new TreeEvaluator();
 		
-		tree.grow("add");
-		tree.grow("5");
-		tree.grow("5");
+		tree.grow("add",2);
+		tree.grow("5",0);
+		tree.grow("5",0);
 		System.out.println(tree.isComplete());
 		Object c = e.evaluate(tree.getRoot());
 	}
