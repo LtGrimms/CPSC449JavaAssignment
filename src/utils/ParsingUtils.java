@@ -93,17 +93,20 @@ public final class ParsingUtils {
 	 * @return 110 for integer, 100 for float, 0 for not a number
 	 */
 	public static int intOrFloat(String arg, int index) {
-		//TODO this function needs to be able to recognize a two decimal error
-		//     for example 5..5 will be recognized as a float
+		
 		int type = 6;
+		boolean flag = false;
 		for (int i = index; i < arg.length() 
 				&& arg.charAt(i) != ' ' 
 				&& arg.charAt(i) != ')'; i++) {
 			Character c = arg.charAt(i);
 			if (!(Character.isDigit(c) || c == '.'))
 				return 0;
-			if (c == '.')
+			if (c == '.'){
 				type = 4;
+				if (flag) return 0;
+				flag = true;
+			}
 		}
 		return type;
 	}
@@ -118,7 +121,7 @@ public final class ParsingUtils {
 	 */
 	public static int findClosingBracket(String arg, int startBracet){
 		int count=1;
-		int key=Integer.MAX_VALUE;;
+		int key=Integer.MAX_VALUE;
 		for(int i=startBracet + 1;i<arg.length();i++){
 			if(arg.charAt(i)=='('){
 				count +=1;
