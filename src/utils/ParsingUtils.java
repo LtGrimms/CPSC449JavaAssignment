@@ -5,6 +5,9 @@ import java.util.ArrayList;
 
 public final class ParsingUtils {
 	
+	public static final int BIGINTEGER = 14, INTEGER = 6, BIGFLOAT = 12, FLOAT = 4, STRING = 1;
+	
+	
 	/**
 	 * This function compares the the argument types against all valid arguemnt types of a function 
 	 * and returns the argument type that corresponds to the input parameters. For example if there is
@@ -15,26 +18,26 @@ public final class ParsingUtils {
 	 * @param argTypes The arrayList of arguments that 
 	 * @return The type (as an integer) representing the return type of a function
 	 */
-	public static int checkForProperArguments(String function, ArrayList<Integer> argTypes) {
+	public static int checkForProperArguments(ArrayList<Integer[]> properArgumentTypes, ArrayList<Integer> argTypes) {
 		//use method data to get parameter and return types for 'function'
 		//put these return types in an ArrayList<Integer[]>
 		// Example: if 'add' returns float and has float, float as parameters
 		//          and also returns int with two int parameters
-		//          then push {100, 100, 100} and {110, 110, 110} onto the list
+		//          then push {4, 4, 4} and {6, 6, 6} onto the list
 		// Example: if 'length' returns int and takes a String and int
-		//          then push {001, 001, 110} to the list
+		//          then push {001, 001, 6} to the list
 		// In all cases the elements added to the list should look like;
 		//		{returnTypeSignature, parameter1TypeSignature, parameter2TypeSignature, ...}
 		// call this array list properArguments
-		ArrayList<Integer[]> properArguments = new ArrayList<Integer[]>();
-		properArguments.add(new Integer[] {6, 6, 6});
-		properArguments.add(new Integer[] {4, 4, 4});
-		properArguments.add(new Integer[] {1, 1, 6});
-		properArguments.add(new Integer[] {6, 1});
+//		ArrayList<Integer[]> properArguments = new ArrayList<Integer[]>();
+//		properArguments.add(new Integer[] {6, 6, 6});
+//		properArguments.add(new Integer[] {4, 4, 4});
+//		properArguments.add(new Integer[] {1, 1, 6});
+//		properArguments.add(new Integer[] {6, 1});
 		int returnType = 0;
 
 		ArgumentChecking:
-			for (Integer[] properFuncArguments : properArguments) {
+			for (Integer[] properFuncArguments : properArgumentTypes) {
 				if (properFuncArguments.length != 1 + argTypes.size())
 					continue;
 				for (int i = 0; i < argTypes.size(); i++) {
@@ -95,7 +98,7 @@ public final class ParsingUtils {
 	public static int intOrFloat(String arg, int index) {
 		//TODO this function needs to be able to recognize a two decimal error
 		//     for example 5..5 will be recognized as a float
-		int type = 6;
+		int type = ;
 		for (int i = index; i < arg.length() 
 				&& arg.charAt(i) != ' ' 
 				&& arg.charAt(i) != ')'; i++) {
