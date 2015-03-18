@@ -17,18 +17,8 @@ public class TreeEvaluator {
 	
 	private Class coms;
 	
-	public TreeEvaluator() throws NoSuchMethodException, SecurityException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, ClassNotFoundException, IOException{
-		File f = new File("C:\\Users\\Darkras\\Documents\\CPSC 449\\commands.jar");
-		Class[] parameterTypes = new Class[]{URL.class};
-		URL url = (f.toURI()).toURL();
-		URLClassLoader sysloader = (URLClassLoader) ClassLoader.getSystemClassLoader();
-		Class<?> sysclass = URLClassLoader.class;
-		Method method = sysclass.getDeclaredMethod("addURL", parameterTypes);
-		method.setAccessible(true);
-		method.invoke(sysloader, new Object[]{ url });
-		
-		Class<?> c = Class.forName("Commands");
-		Method[] methods = c.getDeclaredMethods();
+	public TreeEvaluator(Class<?> incoms) throws NoSuchMethodException, SecurityException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, ClassNotFoundException, IOException{
+		this.coms = incoms;
 		/*for (Method m : methods)   {   
 			Class retType = m.getReturnType();   
             String name = m.getName();   
@@ -52,44 +42,59 @@ public class TreeEvaluator {
 		
 	}
 	
-	public Object evaluate(Node root) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException{
-		Object [] args;
-		args = new Object[5];
+	public String evaluate(Node root) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException{
+		Object[] args;
+		Class[] types;
 		int i= 0;
-		Object result;
 		Node nxt;
 		String fun;
 		fun = root.getValue();
-		if (root.getReturnType() == 0) {
-				//fun = Integer.parseInt(root.getValue());
-			}
-		else if (root.getReturnType() == 1) {
-				//fun = Float.parseFloat(root.getValue());
-			}
-		else{
-				//fun = root.getValue().replace("\"","");
-			}
+		Class c=null;
 		
 		
 		LinkedList<Node> children = root.getChildren();
 		if (children == null){
-			return fun;
+			
 		}
 		Iterator<Node> iter = children.listIterator();
-		
+		types= new Class[children.size()];
+		args = new Object[children.size()];
 		while (iter.hasNext()) {
 			nxt = iter.next();
-			args[i] = evaluate(nxt);
+			switch ( nxt.getReturnType() ) {
+				case 1:
+					c=String.class;
+					break;
+				case 100:
+					c=Float.class;
+					break;
+				case 110:
+					c=Integer.class;
+					break;
+				case 1000:
+					c=Integer.class;
+					break;
+				default:
+					break;
+			}
+			fun = evaluate(nxt);
+			if (root.getReturnType() == 110) {
+				args[i]=Integer.parseInt(fun);
+			}
+			else if (root.getReturnType() == 100) {
+				args[i]=Float.parseFloat(fun);
+			}
+			else{
+				args[i]=fun.replace("\"","");
+			}
+			types[i]=c;
 			i ++;
 			
 		}
 		
-	
+		fun = (String) coms.getMethod(fun,  types).invoke(coms, args); 
 		
-		result = coms.getMethod(fun, (Class[]) args).invoke(coms, args); 
-
-		result = null;
-		return result;
+		return fun;
 	}
 	
 
@@ -98,13 +103,25 @@ public class TreeEvaluator {
 		
 	}*/ 
 	public static void main(String[] args) throws NoSuchMethodException, SecurityException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, ClassNotFoundException, IOException{
-		ParseTree tree = new ParseTree(new Information("C:\\Users\\Darkras\\Documents\\CPSC 449\\commands.jar", "tests.Methods01"));
-		TreeEvaluator e = new TreeEvaluator();
+		ParseTree tree = new ParseTree();
+		File f = new File("~\\Downloads\\commands.jar");
+		Class[] parameterTypes = new Class[]{URL.class};
+		URL url = (f.toURI()).toURL();
+		URLClassLoader sysloader = (URLClassLoader) ClassLoader.getSystemClassLoader();
+		Class<?> sysclass = URLClassLoader.class;
+		Method method = sysclass.getDeclaredMethod("addURL", parameterTypes);
+		method.setAccessible(true);
+		method.invoke(sysloader, new Object[]{ url });
 		
-		tree.grow("add",2);
-		tree.grow("5",0);
-		tree.grow("5",0);
+		Class<?> c = Class.forName("Commands");
+		Method[] methods = c.getDeclaredMethods();
+		
+		TreeEvaluator e = new TreeEvaluator(c);
+		
+		tree.grow("add");
+		tree.grow("5");
+		tree.grow("5");
 		System.out.println(tree.isComplete());
-		Object c = e.evaluate(tree.getRoot());
+		System.out.print(e.evaluate(tree.getRoot()));
 	}
 }
