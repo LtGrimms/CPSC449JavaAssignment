@@ -99,13 +99,13 @@ public class Information {
 						instanceOfProperArguments[0] = BIGFLOAT;
 					}
 					else if (formatted.contains("float")) {
-						instanceOfProperArguments[0] = FLOAT;
+						instanceOfProperArguments[0] = BIGFLOAT;
 					}
 					else if (formatted.contains("Integer") ) {
 						instanceOfProperArguments[0] = BIGINTEGER;
 					}
 					else if (formatted.contains("int") ) {
-						instanceOfProperArguments[0] = INTEGER;
+						instanceOfProperArguments[0] = BIGINTEGER;
 					}
 //				}
 				//will never be reach but just in case

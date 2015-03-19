@@ -65,7 +65,7 @@ public class TreeEvaluator {
 		while (iter.hasNext()) {
 			nxt = iter.next();
 			fun = evaluate(nxt);
-			switch ( root.getReturnType()[i] & 0b1111 ) {
+			switch ( root.getReturnType()[i+1] & 0b1111 ) {
 				case 0b1:
 					c=String.class;
 					args[i]=fun.replace("\"","");

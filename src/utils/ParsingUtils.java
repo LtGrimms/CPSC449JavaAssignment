@@ -106,10 +106,10 @@ public final class ParsingUtils {
 				&& arg.charAt(i) != ' ' 
 				&& arg.charAt(i) != ')'; i++) {
 			Character c = arg.charAt(i);
-			if (!(Character.isDigit(c) || c == '.'))
+			if (!(Character.isDigit(c) || c == '.' || c == '-'))
 				return 0;
 			if (c == '.'){
-				type = FLOAT;
+				type = BIGFLOAT;
 				if (flag) return 0;
 				flag = true;
 			}
