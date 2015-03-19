@@ -18,7 +18,7 @@ public final class ParsingUtils {
 	 * @param argTypes The arrayList of arguments that 
 	 * @return The type (as an integer) representing the return type of a function
 	 */
-	public static int checkForProperArguments(ArrayList<Integer[]> properArgumentTypes, ArrayList<Integer> argTypes) {
+	public static Integer[] checkForProperArguments(ArrayList<Integer[]> properArgumentTypes, ArrayList<Integer> argTypes) {
 		//use method data to get parameter and return types for 'function'
 		//put these return types in an ArrayList<Integer[]>
 		// Example: if 'add' returns float and has float, float as parameters
@@ -34,7 +34,7 @@ public final class ParsingUtils {
 //		properArguments.add(new Integer[] {4, 4, 4});
 //		properArguments.add(new Integer[] {1, 1, 6});
 //		properArguments.add(new Integer[] {6, 1});
-		int returnType = 0;
+		Integer[] returnType = {0};
 
 		ArgumentChecking:
 			for (Integer[] properFuncArguments : properArgumentTypes) {
@@ -42,11 +42,11 @@ public final class ParsingUtils {
 					continue;
 				for (int i = 0; i < argTypes.size(); i++) {
 					int argumentToMatch = properFuncArguments[i+1];
-					if ((argTypes.get(i) & argumentToMatch) != argumentToMatch) {
+					if (((argTypes.get(i) ^ argumentToMatch) & 23) != 00) {
 						continue ArgumentChecking;
 					}
 				}
-				returnType = properFuncArguments[0];
+				returnType = properFuncArguments;
 				break ArgumentChecking;
 			}
 
@@ -98,15 +98,19 @@ public final class ParsingUtils {
 	public static int intOrFloat(String arg, int index) {
 		//TODO this function needs to be able to recognize a two decimal error
 		//     for example 5..5 will be recognized as a float
-		int type = ;
+		int type = BIGINTEGER;
+		boolean flag = false;
 		for (int i = index; i < arg.length() 
 				&& arg.charAt(i) != ' ' 
 				&& arg.charAt(i) != ')'; i++) {
 			Character c = arg.charAt(i);
 			if (!(Character.isDigit(c) || c == '.'))
 				return 0;
-			if (c == '.')
-				type = 4;
+			if (c == '.'){
+				type = FLOAT;
+				if (flag) return 0;
+				flag = true;
+			}
 		}
 		return type;
 	}
@@ -121,7 +125,7 @@ public final class ParsingUtils {
 	 */
 	public static int findClosingBracket(String arg, int startBracet){
 		int count=1;
-		int key=Integer.MAX_VALUE;;
+		int key=Integer.MAX_VALUE;
 		for(int i=startBracet + 1;i<arg.length();i++){
 			if(arg.charAt(i)=='('){
 				count +=1;

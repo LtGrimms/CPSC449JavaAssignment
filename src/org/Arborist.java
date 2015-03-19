@@ -118,7 +118,7 @@ public class Arborist {
 			nextIndex = argData[1] + 1;									
 			argTypes.add(argData[2]);
 		}
-		type = ParsingUtils.checkForProperArguments(function, argTypes);
+		type = ParsingUtils.checkForProperArguments(info.properArguments(function), argTypes)[0];
 		if (type == 0){
 			ParseException ex=new ParseException("Something had the wrong type",index);
 			ErrorUtils.parseError(arg,"Something had the wrong type",ex,verbose);
@@ -141,7 +141,7 @@ public class Arborist {
 
 		System.out.println(1100 & 1000);
 		ParseTree tree;
-		tree = amy.checkArgument("(add 5 5 6 7 8.0 \"hello there\" 4 \"world order\" 5 4 3)");
+		tree = amy.checkArgument("(add (mult 5 5) (mult (add 5 5) 5))");
 		tree.addReturnTypes();
 		System.out.println(tree);
 	}

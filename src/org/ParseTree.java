@@ -86,15 +86,15 @@ public class ParseTree {
 	 * @return the return type of this node
 	 * @throws Exception NOT NEEDED (JASONS)
 	 */
-	private int addReturnType(Node node) throws Exception {
+	private Integer[] addReturnType(Node node) throws Exception {
 	
-		int type = returnType(node.getValue());
-		if (type == 8) {
+		Integer[] type = returnType(node.getValue());
+		if (type[0] == 16) {
 			ArrayList<Integer> arguments = new ArrayList<Integer>();
 			for (Node child : node.children) {
-				arguments.add(addReturnType(child));
+				arguments.add(addReturnType(child)[0]);
 			}
-			type += ParsingUtils.checkForProperArguments(info.properArguments(node.getValue()), arguments);
+			type = ParsingUtils.checkForProperArguments(info.properArguments(node.getValue()), arguments);
 			node.setReturnType(type);
 			return type;
 		} else {
@@ -109,12 +109,20 @@ public class ParseTree {
 	 * @return Type of argument as an integer representation
 	 * @throws Exception NOT NEEDED (JASONS)
 	 */
-	private static int returnType(String arg) throws Exception {
-		if (arg.charAt(0) == '\"')
-			return 1;
-		else if (info.checkForFunction(arg))  //check for function throws exception
-			return 8;
-		else return ParsingUtils.intOrFloat(arg, 0);
+	private static Integer[] returnType(String arg) throws Exception {
+		if (arg.charAt(0) == '\"'){
+			Integer[] stuff =  {1};
+			return stuff;
+		}
+		else if (info.checkForFunction(arg)) { //check for function throws exception
+			Integer[] stuff = {16};
+			return stuff;
+		}
+		else {
+			Integer stuf = ParsingUtils.intOrFloat(arg, 0);
+			Integer[] stuff = {stuf};
+			return stuff;
+		}
 	}
 
 	/**
@@ -150,10 +158,10 @@ public class ParseTree {
 	 */
 	private String buildString(Node node) {
 		String value;
-		if ((node.getReturnType() & 8) == 8) {
-			value = "(" + node.getValue() + ":" + node.getReturnType() + " ";
+		if ((node.getReturnType()[0] & 16) == 16) {
+			value = "(" + node.getValue() + ":" + node.getReturnType()[0] + " ";
 		} else {
-			value = node.getValue() + ":" + node.getReturnType() + " ";
+			value = node.getValue() + ":" + node.getReturnType()[0] + " ";
 		}
 		String append = "";
 
@@ -171,14 +179,14 @@ public class ParseTree {
 	 * returnType which is an integer that represents if the node is a function, Integer, Float or String. 
 	 * They may also represent functions that return Integers, Floats or Strings. Each node is either 
 	 * complete or not based on the number of children it has.
-	 * @author Anthony,Jihyun,Desdmond,Jason,Justin
+	 * @author Anthony,Jihyun,Desmond,Jason,Justin
 	 */
 	protected class Node {
 		private Node parent;
 		private LinkedList<Node> children;
 		private int numberOfChildren;
 		private String value;
-		private int returnType;
+		private Integer[] returnType;
 		private boolean complete = false;
 
 		/**
@@ -198,14 +206,14 @@ public class ParseTree {
 		 * set returnType of node to type
 		 * @param type int representation of the return type
 		 */
-		public void setReturnType(int type) {
+		public void setReturnType(Integer[] type) {
 			returnType = type;
 		}
 		/**
 		 * gets an integer representation of the returnType
 		 * @return Type of node
 		 */
-		public int getReturnType() {
+		public Integer[] getReturnType() {
 			return returnType;
 		}
 		
@@ -246,7 +254,7 @@ public class ParseTree {
 		
 		/**
 		 * See if the node has the right number of children and set its completeness variable. If
-		 * the node is complete check it will automaticly check and set the parents completness.
+		 * the node is complete check it will automatically check and set the parents completeness.
 		 */
 		public void checkCompleteness() {
 			if (children.size() == numberOfChildren)
@@ -257,10 +265,10 @@ public class ParseTree {
 	}
 
 	public static void main(String[] args) throws Exception {
-		ParseTree tree = new ParseTree(new Information("/Users/alcridla/Documents/Methods.jar", "tests.Methods01"));
+		ParseTree tree = new ParseTree(new Information("C:\\Users\\Darkras\\Documents\\CPSC 449\\commands.jar", "Commands"));
 
-//		tree.grow("add", 2);
-//		tree.grow("5", 0);
+		tree.grow("test", 0);
+		tree.grow("5", 0);
 		tree.grow("5", 0);
 		System.out.println(tree.toString());
 		System.out.println(tree.isComplete());

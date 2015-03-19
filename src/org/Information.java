@@ -86,10 +86,10 @@ public class Information {
 				//System.out.println("The method exists");
 				Integer[] instanceOfProperArguments = new Integer[m.getParameterTypes().length + 1];
 				String returnType = m.getReturnType().toString();
-				if (returnType.contains(".")) {
-					int start = returnType.lastIndexOf(".") + 1;
-					int end = returnType.length();
-					String formatted = returnType.substring(start,end);
+//				if (returnType.contains(".")) {
+//					int start = returnType.lastIndexOf(".") + 1;
+//					int end = returnType.length();
+					String formatted = returnType; //.substring(start,end);
 					//System.out.println("The formatted " + formatted);
 					if (formatted.equals("String")) {
 						//System.out.println("formatted reach");
@@ -107,7 +107,7 @@ public class Information {
 					else if (formatted.equals("int") ) {
 						instanceOfProperArguments[0] = INTEGER;
 					}
-				}
+//				}
 				//will never be reach but just in case
 //				else if (m.getReturnType().toString().equals("String")) {
 //					System.out.println("formatted reach");
@@ -126,10 +126,10 @@ public class Information {
 				Class[] paramTypes = m.getParameterTypes();
 				for (int j = 1; j < instanceOfProperArguments.length; j++) {
 					String parameter = paramTypes[j - 1].getName();
-					if (parameter.contains(".") ){
-						int start = parameter.lastIndexOf(".") + 1;
-						int end = parameter.length();
-						String formatted = parameter.substring(start,end).toLowerCase();
+//					if (parameter.contains(".") ){
+//						int start = parameter.lastIndexOf(".") + 1;
+//						int end = parameter.length();
+						formatted = parameter; //.substring(start,end).toLowerCase();
 						if (formatted.equals("String")) {
 							instanceOfProperArguments[j] = STRING;
 						}
@@ -145,7 +145,7 @@ public class Information {
 						else if (formatted.equals("int") ) {
 							instanceOfProperArguments[j] = INTEGER;
 						}
-						}//end parameter contains
+//						}//end parameter contains
 					//never gonna reach it unless shit happens
 //					else if (paramTypes[j].getName().equals("String")) {
 //						instanceOfProperArguments[j] = 1;
@@ -159,12 +159,17 @@ public class Information {
 //					else if (paramTypes[j].getName().equals("Integer") ){
 //						instanceOfProperArguments[j] = 6;
 //					}
+
+					
 					
 				}//end for 
 				properArguments.add(instanceOfProperArguments);
 			}//end if 
 			
+
 		}//end for
+		
+		
 		return properArguments;
 	}//end method 
 	public static Class getClassName() {
