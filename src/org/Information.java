@@ -91,35 +91,35 @@ public class Information {
 //					int end = returnType.length();
 					String formatted = returnType; //.substring(start,end);
 					//System.out.println("The formatted " + formatted);
-					if (formatted.equals("String")) {
+					if (formatted.contains("String")) {
 						//System.out.println("formatted reach");
 						instanceOfProperArguments[0] = STRING;
 					}
-					else if (formatted.equals("Float")) {
+					else if (formatted.contains("Float")) {
 						instanceOfProperArguments[0] = BIGFLOAT;
 					}
-					else if (formatted.equals("float")) {
+					else if (formatted.contains("float")) {
 						instanceOfProperArguments[0] = FLOAT;
 					}
-					else if (formatted.equals("Integer") ) {
+					else if (formatted.contains("Integer") ) {
 						instanceOfProperArguments[0] = BIGINTEGER;
 					}
-					else if (formatted.equals("int") ) {
+					else if (formatted.contains("int") ) {
 						instanceOfProperArguments[0] = INTEGER;
 					}
 //				}
 				//will never be reach but just in case
-//				else if (m.getReturnType().toString().equals("String")) {
+//				else if (m.getReturnType().toString().contains("String")) {
 //					System.out.println("formatted reach");
 //					instanceOfProperArguments[0] = 1;
 //				}
-//				else if (m.getReturnType().toString().equals("float") ){
+//				else if (m.getReturnType().toString().contains("float") ){
 //					instanceOfProperArguments[0] = 4;
 //				}
-//				else if (m.getReturnType().toString().equals("int") ){
+//				else if (m.getReturnType().toString().contains("int") ){
 //					instanceOfProperArguments[0] = 6;
 //				}
-//				else if (m.getReturnType().toString().equals("Integer") ){
+//				else if (m.getReturnType().toString().contains("Integer") ){
 //					instanceOfProperArguments[0] = 6;
 //				} 
 				//parameter block
@@ -130,33 +130,33 @@ public class Information {
 //						int start = parameter.lastIndexOf(".") + 1;
 //						int end = parameter.length();
 						formatted = parameter; //.substring(start,end).toLowerCase();
-						if (formatted.equals("String")) {
+						if (formatted.contains("String")) {
 							instanceOfProperArguments[j] = STRING;
 						}
-						else if (formatted.equals("Float")) {
+						else if (formatted.contains("Float")) {
 							instanceOfProperArguments[j] = BIGFLOAT;
 						}
-						else if (formatted.equals("float")) {
+						else if (formatted.contains("float")) {
 							instanceOfProperArguments[j] = FLOAT;
 						}
-						else if (formatted.equals("Integer")) {
+						else if (formatted.contains("Integer")) {
 							instanceOfProperArguments[j] = BIGINTEGER;
 						}
-						else if (formatted.equals("int") ) {
+						else if (formatted.contains("int") ) {
 							instanceOfProperArguments[j] = INTEGER;
 						}
 //						}//end parameter contains
 					//never gonna reach it unless shit happens
-//					else if (paramTypes[j].getName().equals("String")) {
+//					else if (paramTypes[j].getName().contains("String")) {
 //						instanceOfProperArguments[j] = 1;
 //					}
-//					else if (paramTypes[j].getName().equals("float") ){
+//					else if (paramTypes[j].getName().contains("float") ){
 //						instanceOfProperArguments[j] = 4;
 //					}
-//					else if (paramTypes[j].getName().equals("int") ){
+//					else if (paramTypes[j].getName().contains("int") ){
 //						instanceOfProperArguments[j] = 6;
 //					}
-//					else if (paramTypes[j].getName().equals("Integer") ){
+//					else if (paramTypes[j].getName().contains("Integer") ){
 //						instanceOfProperArguments[j] = 6;
 //					}
 
