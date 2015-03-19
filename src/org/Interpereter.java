@@ -92,16 +92,8 @@ public class Interpereter {
 	 * loaded into the interpreter. The second part uses java reflection to interpret commands form an input 
 	 * stream .
 	 * @param args
-	 * @throws IOException 
-	 * @throws ClassNotFoundException 
-	 * @throws InvocationTargetException 
-	 * @throws IllegalArgumentException 
-	 * @throws IllegalAccessException 
-	 * @throws SecurityException 
-	 * @throws NoSuchMethodException 
-	 * @throws Exception
 	 */
-	public static void main(String[] args) throws NoSuchMethodException, SecurityException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, ClassNotFoundException, IOException {
+	public static void main(String[] args) {
 
 		//TODO Still need to ask about the error with exit code -4 since  I don't think 
 		//TODO the loop below will catch it though it could with minor mods

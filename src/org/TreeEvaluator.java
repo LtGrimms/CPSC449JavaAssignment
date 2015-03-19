@@ -19,7 +19,7 @@ public class TreeEvaluator {
 	private Class coms;
 	private Information info;
 	
-	public TreeEvaluator(Information info) throws NoSuchMethodException, SecurityException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, ClassNotFoundException, IOException{
+	public TreeEvaluator(Information info) /*throws NoSuchMethodException, SecurityException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, ClassNotFoundException, IOException*/{
 		this.coms = info.cls;
 		/*for (Method m : methods)   {   
 			Class retType = m.getReturnType();   
