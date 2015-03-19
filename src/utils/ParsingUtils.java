@@ -1,5 +1,6 @@
 package utils;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 
 
@@ -176,30 +177,57 @@ public final class ParsingUtils {
 	}
 	
 	 public static int numberOfArg(String arg, int start, int end){
-		  int count=1;
-		  int count_quote=1;
-		  int number=0;
-		  
-		  for(int i=start;i<=end;i++){
-		   if(arg.charAt(i)=='('){
-		    count+=1;
-		   }
-		   else if(arg.charAt(i)==')'){
-		    count-=1;
-		   }
-
-		   if(arg.charAt(i)=='\"'){
-		    count_quote+=1;
-		   }
-		   
-		   if(arg.charAt(i)==' '){
-		    if(count%2==0 && count_quote%2==1){
-		     number+=1;
-		    }
-		   }
-		  }
-
-		  return number;
+		 int arguments = 0;
+		 
+		 int index = start + nextWord(arg, start + 1).length() + 1;
+		 for (int i = index; i < end; i++) {
+			 if (arg.charAt(i) == ' ' || arg.charAt(i) == ')')
+				 continue;
+			 if (arg.charAt(i) == '(') {
+				 arguments++;
+				 i = findClosingBracket(arg, i);
+				 continue;
+			 }
+			 if (arg.charAt(i) == '\"') {
+				 int closingBracket = findClosingBracket(arg, i);
+				 if (closingBracket == Integer.MAX_VALUE) {
+					 return Integer.MAX_VALUE;
+				 } else {
+					 arguments++;
+					 i = closingBracket;
+				 }
+			 } else {
+				 i += nextWord(arg, i).length();
+				 arguments++;
+			 }
 		 }
+		 return arguments;
+	 }
+		 
+//		  int count=1;
+//		  int count_quote=1;
+//		  int number=0;
+//		  
+//		  for(int i=start;i<=end;i++){
+//		   if(arg.charAt(i)=='('){
+//		    count+=1;
+//		   }
+//		   else if(arg.charAt(i)==')'){
+//		    count-=1;
+//		   }
+//
+//		   if(arg.charAt(i)=='\"'){
+//		    count_quote+=1;
+//		   }
+//		   
+//		   if(arg.charAt(i)==' '){
+//		    if(count%2==0 && count_quote%2==1){
+//		     number+=1;
+//		    }
+//		   }
+//		  }
+//
+//		  return number;
+//		 }
 
 }
