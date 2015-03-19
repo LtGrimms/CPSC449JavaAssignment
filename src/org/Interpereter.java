@@ -1,5 +1,7 @@
 package org;
 
+import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.nio.file.Path;
 import java.text.ParseException;
 import java.util.Scanner;
@@ -90,9 +92,16 @@ public class Interpereter {
 	 * loaded into the interpreter. The second part uses java reflection to interpret commands form an input 
 	 * stream .
 	 * @param args
+	 * @throws IOException 
+	 * @throws ClassNotFoundException 
+	 * @throws InvocationTargetException 
+	 * @throws IllegalArgumentException 
+	 * @throws IllegalAccessException 
+	 * @throws SecurityException 
+	 * @throws NoSuchMethodException 
 	 * @throws Exception
 	 */
-	public static void main(String[] args) {
+	public static void main(String[] args) throws NoSuchMethodException, SecurityException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, ClassNotFoundException, IOException {
 
 		//TODO Still need to ask about the error with exit code -4 since  I don't think 
 		//TODO the loop below will catch it though it could with minor mods
@@ -141,7 +150,7 @@ public class Interpereter {
 		
 		Information info = new Information(jar, methodsClass); // Needs to exit with code -6 if method class cannot be found and exit code -5 if jar cannot be loaded
 		Arborist arborist = new Arborist(info, verb);
-		//TreeEvaluator eval = new TreeEvaluator(info.getClass());
+		TreeEvaluator eval = new TreeEvaluator(info);
 		
 		while (true) {
 			Scanner in = new Scanner(System.in);
@@ -176,7 +185,7 @@ public class Interpereter {
 			try {
 				tree = arborist.checkArgument(argument);
 				tree.addReturnTypes();
-				String output = tree.toString(); //eval.evaluateTree(tree);
+				String output = eval.evaluate(tree.getRoot());
 				System.out.println(output);
 			} catch (ParseException ex) {
 			} catch (Exception ex) {

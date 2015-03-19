@@ -43,7 +43,8 @@ public final class ParsingUtils {
 					continue;
 				for (int i = 0; i < argTypes.size(); i++) {
 					int argumentToMatch = properFuncArguments[i+1];
-					if (((argTypes.get(i) ^ argumentToMatch) & 23) != 00) {
+					if (((argTypes.get(i) & argumentToMatch) != (8 | argumentToMatch))
+					  && (argTypes.get(i) & argumentToMatch) != (argumentToMatch)) {
 						continue ArgumentChecking;
 					}
 				}
