@@ -53,7 +53,6 @@ public class TreeEvaluator {
 		fun = root.getValue();
 		Class c=null;
 		
-		
 		LinkedList<Node> children = root.getChildren();
 
 		Iterator<Node> iter = children.listIterator();
@@ -66,7 +65,7 @@ public class TreeEvaluator {
 		while (iter.hasNext()) {
 			nxt = iter.next();
 			fun = evaluate(nxt);
-			switch ( nxt.getReturnType() & 7 ) {
+			switch ( root.getReturnType()[i] & 0b1111 ) {
 				case 0b1:
 					c=String.class;
 					args[i]=fun.replace("\"","");
@@ -77,6 +76,14 @@ public class TreeEvaluator {
 					break;
 				case 0b110:
 					c=int.class;
+					args[i]=new Integer(Integer.parseInt(fun));
+					break;
+				case 0b1100:
+					c=Float.class;
+					args[i]=new Float(Float.parseFloat(fun));
+					break;
+				case 0b1110:
+					c=Integer.class;
 					args[i]=new Integer(Integer.parseInt(fun));
 					break;
 				default:
@@ -125,7 +132,7 @@ public class TreeEvaluator {
 		Method[] methods = c.getDeclaredMethods();
 		
 		Information test = new Information("C:\\Users\\Darkras\\Documents\\CPSC 449\\commands.jar", "Commands");
-		List<List<Integer>> testList = test.properArguments("add");
+		List<Integer[]> testList = test.properArguments("add");
 		
 		System.out.println(testList);
 		
