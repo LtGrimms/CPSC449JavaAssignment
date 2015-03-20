@@ -5,9 +5,12 @@ package org;
  * http://stackoverflow.com/questions/194698/how-to-load-a-jar-file-at-runtime
  * Core Java Volume I Fundamentals Eigth Edition page 222-224*/
 import java.util.*;
+import java.util.jar.JarFile;
 import java.lang.reflect.*;
 import java.io.*;
 import java.net.*;
+
+import utils.ErrorUtils;
 import static utils.Types.BIGINTEGER;
 import static utils.Types.INTEGER;
 import static utils.Types.BIGFLOAT;
@@ -16,6 +19,7 @@ import static utils.Types.STRING;
 
 public class Information {
 	
+	private JarFile jarfile;
 	
 	public static Class cls;
 	public Information (String jar, String methodsClass){
@@ -26,12 +30,10 @@ public class Information {
 			ClassLoader cl = new URLClassLoader(urls);
 			this.cls = cl.loadClass(methodsClass);
 		}
-		catch (NoClassDefFoundError e) {
-			e.printStackTrace();
-			System.exit(-6);
+		catch (ClassNotFoundException e) {
+			ErrorUtils.couldNotFindMethodError();
 		}
-		catch (Exception e) {
-			e.printStackTrace();
+		catch (MalformedURLException e) {
 		}
 	}
 	public static boolean checkForFunction(String methodName){

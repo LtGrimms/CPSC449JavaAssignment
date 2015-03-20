@@ -9,6 +9,7 @@ public class ErrorUtils {
 	 */
 	public static void unRecognizedQualifierError() {
 		System.out.println("unrecognized qualifier");
+		Printing.printSynopsis();
 		System.exit(-1);
 	}
 	
@@ -16,7 +17,8 @@ public class ErrorUtils {
 	 * ends program if it recived to many command line args
 	 */
 	public static void toManyArgumentsError() {
-		System.out.println("Too many arguments");
+		System.out.println("to many arguments");
+		Printing.printSynopsis();
 		System.exit(-2);
 	}
 	
@@ -25,6 +27,7 @@ public class ErrorUtils {
 	 */
 	public static void jarIsNotAJarError() {
 		System.out.println("jar is not a jar");
+		Printing.printSynopsis();
 		System.exit(-3);
 	}
 	
@@ -32,7 +35,7 @@ public class ErrorUtils {
 	 * Ends program if the help qualifier is not in the right place
 	 */
 	public static void helpInWrongLocError() {
-		//NotYet Implemented
+		Printing.printSynopsis();
 		System.exit(-4);
 	}
 	
@@ -47,7 +50,7 @@ public class ErrorUtils {
 	/**
 	 * Ends the program if it could not find the method class within the jar file specified on the command line
 	 */
-	public static void couldNotFindMethidError() {
+	public static void couldNotFindMethodError() {
 		
 		System.exit(-6);
 	}

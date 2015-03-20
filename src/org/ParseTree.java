@@ -42,8 +42,9 @@ public class ParseTree {
 	 * @param node the potential parent of the new node
 	 */
 	private void grow(String st, int numberOfChildren, Node node) {
+//		For debugging
 //		if (node.isComplete())
-//			throw new IllegalArgumentException(); // too many arguments to root node NEVER HAPPENS
+//			throw new IllegalArgumentException(); // too many arguments to root node
 
 		boolean grown = false;
 
@@ -71,9 +72,10 @@ public class ParseTree {
 	 * we know the data types each node will return.
 	 * @throws Exception when this is called on an incomplete tree
 	 */
-	public void addReturnTypes() throws Exception {
-		if (!isComplete())
-			throw new Exception("tried to add return types to an incomplete tree"); //shouldn't happen?
+	public void addReturnTypes() /*throws Exception*/ {
+//		very handy for debugging
+//		if (!isComplete())
+//			throw new Exception("tried to add return types to an incomplete tree"); //shouldn't happen?
 	
 		addReturnType(root);
 	}
@@ -111,17 +113,17 @@ public class ParseTree {
 	 */
 	private static Integer[] returnType(String arg) {
 		if (arg.charAt(0) == '\"'){
-			Integer[] stuff =  {1};
-			return stuff;
+			Integer[] type =  {1};
+			return type;
 		}
 		else if (info.checkForFunction(arg)) { //check for function throws exception
-			Integer[] stuff = {16};
-			return stuff;
+			Integer[] type = {16};
+			return type;
 		}
 		else {
-			Integer stuf = ParsingUtils.intOrFloat(arg, 0);
-			Integer[] stuff = {stuf};
-			return stuff;
+			Integer intOrFloat = ParsingUtils.intOrFloat(arg, 0);
+			Integer[] type = {intOrFloat};
+			return type;
 		}
 	}
 
@@ -153,6 +155,7 @@ public class ParseTree {
 	}
 	/**
 	 * Build string from parseTree by recursively looking through from the root down.
+	 * This is mainly for debugging
 	 * @param node current node being examined in recursive calls
 	 * @return a string representation of the node
 	 */
