@@ -1,54 +1,16 @@
 package org;
 
+import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
-import java.nio.file.Path;
 import java.text.ParseException;
 import java.util.Scanner;
+import java.util.jar.JarFile;
 
 import utils.ErrorUtils;
+import utils.Printing;
 
 public class Interpereter {
 	
-	/**
-	 * Pretty self explanatory, this prints the synopsis for the program. This is
-	 * run before the program enters interpreter mode.
-	 */
-	private static void printSynopsis() {
-		System.out.println("Synopsis:");
-		System.out.println("  methods");
-		System.out.println("  methods { -h | -? | --help }+");
-		System.out.println("  methods {-v --verbose}* <jar-file> [<class-name>]");
-		System.out.println("Arguments:");
-		System.out.println("  <jar-file>:   The .jar file that contains the class to laod (see next line).");
-		System.out.println("  <class-name>: The full qualified class name containing publc static command methods to call.");
-		System.out.println("Qualifiers:");
-		System.out.println("  -v --verbose: Print out detailed errors, warning, and tracking.");
-		System.out.println("  -h -? --help: Pring out a detailed help message.");
-		System.out.println("Single-char qualifiers may be grouped; long qualifiers may be truncated to unique prefixes and are not case sensitive.");
-	}
-	
-	/**
-	 * adds an extra line to the print synopsis function describing proper input
-	 * for the program.
-	 */
-	private static void printHelp() {
-		printSynopsis();
-		System.out.println("This program interprets commands of the format '(<method> {arg}*)' on the command lind, finds cooresponding methods in <class-name>, and executes them, printing the result to sysout.");
-	}
-	
-	/**
-	 * This function is called inside the interpreter and prints out the interpreters 
-	 * help text.
-	 */
-	private static void printInterpreterHelp() {
-		System.out.println("q            : Quit the program.");
-		System.out.println("v            : Toggle verbose mode (stack traces).");
-		System.out.println("f            : List all know functions.");
-		System.out.println("?            : Print this helpful text.");
-		System.out.println("<expression> : Evaluate the expression.");
-		System.out.println("Expressions can be integers, floats, strings (sourrounded in double quotes) or function calls of the form '(identifier {expression}*)'.");
-	}
 	
 	/**
 	 * This is to check the input arguments for the help or verbose qualifers.
@@ -86,6 +48,32 @@ public class Interpereter {
 			return newQualifiers;
 	}
 	
+	
+	/**
+	 * Used to determine if the inputed jar file is in-fact a jar
+	 * taken from http://stackoverflow.com/questions/7085384/how-to-know-whether-a-zipped-file-is-jar-file-or-not 
+	 * @param file the file to test for jar status
+	 * @return true if the file is a jar
+	 */
+	 private static boolean detectJarFile(String file) {
+	      try {
+	        JarFile jarFile = new JarFile(file);
+
+	      } catch (java.util.zip.ZipException e) {
+	        // the uploaded file is NOT JAR file
+	        return false;
+	      } catch (IOException e) {
+	    	  return false;
+	      }
+
+	      return true;
+	    }
+	 
+	 private static boolean detectFile(String arg) {
+		 File file = new File(arg);
+		 return file.isFile();
+	 }
+	
 	/**
 	 * The main loop has two parts, the first considers the input parameters and determines if help and/or
 	 * verbose has been called and tries to determine the jar file and method class that the arguments want
@@ -94,10 +82,6 @@ public class Interpereter {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-
-		//TODO Still need to ask about the error with exit code -4 since  I don't think 
-		//TODO the loop below will catch it though it could with minor mods
-		//TODO Create control structure that will load the jar.
 
 		//__________________________________PART 1: check input params______________________________________
 		String jar = null;
@@ -109,10 +93,13 @@ public class Interpereter {
 				// continue;
 			} else {
 				if (jar == null) {
-					if (/* arg is not a jar */false) {
-						ErrorUtils.jarIsNotAJarError(); // How do we tell the diff between exit code -3 and -5?
-					}
 					jar = arg;
+					if (!detectFile(jar)){
+						ErrorUtils.jarIsNotAJarError();
+					}
+					if (!detectJarFile(jar)) {
+						ErrorUtils.couldNotLoadJarError();
+					}
 				} else if (jar != null && methodsClass == null) {
 					methodsClass = arg;
 				} else {
@@ -125,10 +112,10 @@ public class Interpereter {
 		boolean verb = qualifiers[1];
 		
 		if (jar == null && !help) {
-			printSynopsis();
+			Printing.printSynopsis();
 			System.exit(0); //Double check this
 		} else if (help) {
-			printHelp();
+			Printing.printHelp();
 			if (jar == null)
 				System.exit(0);
 		}
@@ -162,11 +149,10 @@ public class Interpereter {
 			} 
 			if (lengthOne && firstChar == 'v') {
 				arborist.toggleVerbose();
-				// If anything else needs to toggle verbose put it here
 				continue;
 			} 
 			if (lengthOne && firstChar == '?') {
-				printInterpreterHelp();
+				Printing.printInterpreterHelp();
 				continue;
 			}
 			if (lengthOne && firstChar == 'q') {
@@ -182,7 +168,8 @@ public class Interpereter {
 				System.out.println(output);
 			} catch (ParseException ex) {
 			}
-				catch (Exception ex) {
+			catch (Exception ex) {
+				System.out.println("Someting in the reflection data threw an exception");
 				ex.printStackTrace(); //catches "tried to addReturnTypes to incomplete tree"
 									  //Leave this in for grading as it will catch calls to methods that throw exceptions in the reflection code
 			}

@@ -88,12 +88,13 @@ public class Arborist {
 		} else {
 			end = ParsingUtils.findEndOfArgument(arg, index);
 			type = ParsingUtils.intOrFloat(arg, index);
-			String node = arg.substring(index, end);
-			Float fl = Float.parseFloat(node);
 			if (type == ERROR) {
 				ParseException ex = new ParseException("Could not identifiy argument", index);
 				ErrorUtils.parseError(arg, "Could not identify argument" ,ex, verbose);
 			} 
+			
+			String node = arg.substring(index, end);
+			Float fl = Float.parseFloat(node);
 //			else if (fl > Float.MAX_VALUE - 1); {
 //				ParseException ex = new ParseException("Number is to large", index);
 //				ErrorUtils.parseError(arg, "Number is to large", ex, verbose);
@@ -157,8 +158,9 @@ public class Arborist {
 		type = guard;
 		
 		if (type == ERROR){
-			ParseException ex=new ParseException("Something had the wrong type",index);
-			ErrorUtils.parseError(arg,"Something had the wrong type",ex,verbose);
+			String errorMsg = "An argument for " + function + " was not of the right type";
+			ParseException ex=new ParseException(errorMsg, index + 1);
+			ErrorUtils.parseError(arg, errorMsg, ex, verbose);
 		}
 		return type;
 	}
