@@ -11,7 +11,7 @@ public class Methods03 {
 		return fx / fy;
 	}  // Divide by zero error
 	
-	public static Throwable exception() {
-		return new Exception("This is a malicios method");
+	public static void exception() throws Exception {
+		throw new Exception("This is a malicios method");
 	}
 }

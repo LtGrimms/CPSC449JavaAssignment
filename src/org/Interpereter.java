@@ -152,8 +152,9 @@ public class Interpereter {
 			if (argument.length() == 0)
 				continue;
 			
-			boolean lengthOne = argument.length() == 1;
-			char firstChar = argument.charAt(0);
+			String noSpaces = argument.trim();
+			boolean lengthOne = noSpaces.length() == 1;
+			char firstChar = noSpaces.charAt(0);
 			
 			if (lengthOne && firstChar == 'f') {
 				info.printFunctions();
@@ -180,8 +181,10 @@ public class Interpereter {
 				String output = eval.evaluate(tree.getRoot());
 				System.out.println(output);
 			} catch (ParseException ex) {
-			} catch (Exception ex) {
-				ex.printStackTrace(); //comment out for grading
+			}
+				catch (Exception ex) {
+				ex.printStackTrace(); //catches "tried to addReturnTypes to incomplete tree"
+									  //Leave this in for grading as it will catch calls to methods that throw exceptions in the reflection code
 			}
 			
 			//in.close(); //not sure why but this causes an error

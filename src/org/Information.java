@@ -8,9 +8,13 @@ import java.util.*;
 import java.lang.reflect.*;
 import java.io.*;
 import java.net.*;
+import static utils.Types.BIGINTEGER;
+import static utils.Types.INTEGER;
+import static utils.Types.BIGFLOAT;
+import static utils.Types.FLOAT;
+import static utils.Types.STRING;
 
 public class Information {
-	public static final int BIGINTEGER = 14, INTEGER = 6, BIGFLOAT = 12, FLOAT = 4, STRING = 1;
 	
 	
 	public static Class cls;
@@ -34,11 +38,9 @@ public class Information {
 		List<Method> ms = Arrays.asList(cls.getMethods());
 		for (Method m : ms) {
 			if (m.getName().equals(methodName)) {
-				//System.out.println("The method exists");
 				return true;
 			}
 		}
-		//System.err.println("The method does not exists");
 		return false;
 	}//end method
 	public static void printFunctions (){
@@ -82,17 +84,10 @@ public class Information {
 		List<Method> ms = Arrays.asList(cls.getMethods());
 		for (Method m : ms) {
 			if (m.getName().equals(methodName)) {
-				//return type block
-				//System.out.println("The method exists");
 				Integer[] instanceOfProperArguments = new Integer[m.getParameterTypes().length + 1];
 				String returnType = m.getReturnType().toString();
-//				if (returnType.contains(".")) {
-//					int start = returnType.lastIndexOf(".") + 1;
-//					int end = returnType.length();
-					String formatted = returnType; //.substring(start,end);
-					//System.out.println("The formatted " + formatted);
+					String formatted = returnType; 
 					if (formatted.contains("String")) {
-						//System.out.println("formatted reach");
 						instanceOfProperArguments[0] = STRING;
 					}
 					else if (formatted.contains("Float")) {
@@ -107,29 +102,11 @@ public class Information {
 					else if (formatted.contains("int") ) {
 						instanceOfProperArguments[0] = BIGINTEGER;
 					}
-//				}
-				//will never be reach but just in case
-//				else if (m.getReturnType().toString().contains("String")) {
-//					System.out.println("formatted reach");
-//					instanceOfProperArguments[0] = 1;
-//				}
-//				else if (m.getReturnType().toString().contains("float") ){
-//					instanceOfProperArguments[0] = 4;
-//				}
-//				else if (m.getReturnType().toString().contains("int") ){
-//					instanceOfProperArguments[0] = 6;
-//				}
-//				else if (m.getReturnType().toString().contains("Integer") ){
-//					instanceOfProperArguments[0] = 6;
-//				} 
-				//parameter block
+
 				Class[] paramTypes = m.getParameterTypes();
 				for (int j = 1; j < instanceOfProperArguments.length; j++) {
 					String parameter = paramTypes[j - 1].getName();
-//					if (parameter.contains(".") ){
-//						int start = parameter.lastIndexOf(".") + 1;
-//						int end = parameter.length();
-						formatted = parameter; //.substring(start,end).toLowerCase();
+						formatted = parameter; 
 						if (formatted.contains("String")) {
 							instanceOfProperArguments[j] = STRING;
 						}
@@ -145,23 +122,6 @@ public class Information {
 						else if (formatted.contains("int") ) {
 							instanceOfProperArguments[j] = INTEGER;
 						}
-//						}//end parameter contains
-					//never gonna reach it unless shit happens
-//					else if (paramTypes[j].getName().contains("String")) {
-//						instanceOfProperArguments[j] = 1;
-//					}
-//					else if (paramTypes[j].getName().contains("float") ){
-//						instanceOfProperArguments[j] = 4;
-//					}
-//					else if (paramTypes[j].getName().contains("int") ){
-//						instanceOfProperArguments[j] = 6;
-//					}
-//					else if (paramTypes[j].getName().contains("Integer") ){
-//						instanceOfProperArguments[j] = 6;
-//					}
-
-					
-					
 				}//end for 
 				properArguments.add(instanceOfProperArguments);
 			}//end if 

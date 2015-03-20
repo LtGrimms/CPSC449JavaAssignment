@@ -5,6 +5,12 @@ import java.util.ArrayList;
 
 import utils.ErrorUtils;
 import utils.ParsingUtils;
+import static utils.Types.BIGINTEGER;
+import static utils.Types.INTEGER;
+import static utils.Types.BIGFLOAT;
+import static utils.Types.FLOAT;
+import static utils.Types.STRING;
+import static utils.Types.ERROR;
 
 public class Arborist {
 
@@ -35,7 +41,7 @@ public class Arborist {
 	 */
 	public ParseTree checkArgument(String arg) throws ParseException{
 		tree = new ParseTree(info);
-		checkArgument(arg, new int[] {0, Integer.MAX_VALUE - 1, 0});
+		checkArgument(arg, new int[] {0, Integer.MAX_VALUE - 1, ERROR});
 		return tree;
 	}
 
@@ -69,22 +75,31 @@ public class Arborist {
 
 		} else if (arg.charAt(index) == '"') {
 			end = ParsingUtils.findClosingQuote(arg, index);
+			String node = arg.substring(index, end + 1);
+			
 			if (end > argumentData[1]) {
 				ParseException ex=new ParseException("could not find closing quote",index);
 				ErrorUtils.parseError(arg,"could not find closing quote",ex,verbose);
 			}
-			tree.grow(arg.substring(index, end + 1), 0);
-			return new int[] {index, end, 1};
+			
+			tree.grow(node, 0);
+			return new int[] {index, end, STRING};
 
 		} else {
 			end = ParsingUtils.findEndOfArgument(arg, index);
 			type = ParsingUtils.intOrFloat(arg, index);
-			if (type == 0) {
+			String node = arg.substring(index, end);
+			Float fl = Float.parseFloat(node);
+			if (type == ERROR) {
 				ParseException ex = new ParseException("Could not identifiy argument", index);
 				ErrorUtils.parseError(arg, "Could not identify argument" ,ex, verbose);
-			}
+			} 
+//			else if (fl > Float.MAX_VALUE - 1); {
+//				ParseException ex = new ParseException("Number is to large", index);
+//				ErrorUtils.parseError(arg, "Number is to large", ex, verbose);
+//			}
 
-			tree.grow(arg.substring(index, end), 0);
+			tree.grow(node, 0);
 			
 			return new int[] {index, end, type};
 		}
@@ -111,20 +126,41 @@ public class Arborist {
 		int numberOfArguments = ParsingUtils.numberOfArg(arg, index, end);
 		tree.grow(function, numberOfArguments);
 		
-		int nextIndex = index + function.length() + 1;									
-		ArrayList<Integer> argTypes = new ArrayList<Integer>();
-		while (nextIndex < end) {
-			int[] argData = checkArgument(arg, new int[] {nextIndex, end, 0});
-			nextIndex = argData[1] + 1;									
-			argTypes.add(argData[2]);
-		}
-		type = ParsingUtils.checkForProperArguments(info.properArguments(function), argTypes)[0];
-		if (type == 0){
+		type = ensureProperArguments(arg, function, index, end, numberOfArguments);
+		
+		if (type == ERROR){
 			ParseException ex=new ParseException("Something had the wrong type",index);
 			ErrorUtils.parseError(arg,"Something had the wrong type",ex,verbose);
 		}
 
 		return new int[] {index,end,type};
+	}
+	
+	private int ensureProperArguments(String arg, String function, int index, int end, int numberOfArguments) throws ParseException {
+		
+		int type = 0;
+		int nextIndex = index + function.length() + 1;		
+		
+		ArrayList<Integer> argTypes = new ArrayList<Integer>();
+		while (argTypes.size() < numberOfArguments) {
+			int[] argData = checkArgument(arg, new int[] {nextIndex, end, 0});
+			nextIndex = argData[1] + 1;									
+			argTypes.add(argData[2]);
+		}
+		
+		Integer guard = ParsingUtils.checkForProperArguments(info.properArguments(function), argTypes)[0];
+		if (guard == null) {
+			ParseException ex = new ParseException("This function did not return a String, (I)int or (F)float", index);
+			ErrorUtils.parseError(arg,"This function did not return a String, (I)int or (F)float", ex, verbose);
+		}
+		
+		type = guard;
+		
+		if (type == ERROR){
+			ParseException ex=new ParseException("Something had the wrong type",index);
+			ErrorUtils.parseError(arg,"Something had the wrong type",ex,verbose);
+		}
+		return type;
 	}
 
 	/**

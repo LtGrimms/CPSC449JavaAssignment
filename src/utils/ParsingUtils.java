@@ -2,11 +2,14 @@ package utils;
 
 import java.text.ParseException;
 import java.util.ArrayList;
-
+import static utils.Types.BIGINTEGER;
+import static utils.Types.INTEGER;
+import static utils.Types.BIGFLOAT;
+import static utils.Types.FLOAT;
+import static utils.Types.STRING;
+import static utils.Types.ERROR;
 
 public final class ParsingUtils {
-	
-	public static final int BIGINTEGER = 14, INTEGER = 6, BIGFLOAT = 12, FLOAT = 4, STRING = 1;
 	
 	
 	/**
@@ -106,9 +109,15 @@ public final class ParsingUtils {
 				&& arg.charAt(i) != ' ' 
 				&& arg.charAt(i) != ')'; i++) {
 			Character c = arg.charAt(i);
-			if (!(Character.isDigit(c) || c == '.' || c == '-'))
+			if (!(Character.isDigit(c) 
+				 || c == '.' 
+				 || c == '-'
+				 || c == 'E'
+				 || c == 'e'))
 				return 0;
-			if (c == '.'){
+			if (c == '.' 
+			 || c == 'e'
+			 || c == 'E'){
 				type = BIGFLOAT;
 				if (flag) return 0;
 				flag = true;
@@ -165,7 +174,12 @@ public final class ParsingUtils {
 		return key;
 	}
 
-
+	/**
+	 * This function finds the end of the word in a string at the given index
+	 * @param arg The string being parsed
+	 * @param index The index of the start (or any part really) of the word
+	 * @return the index of the character after the end of the word. IE if the word at index i is "mad" then arg.charAt(return - 1) will be 'd'
+	 */
 	public static int findEndOfArgument(String arg, int index) {
 		for (int i = index; i < arg.length(); i++) {
 			if (arg.charAt(i) == ' '
@@ -177,6 +191,14 @@ public final class ParsingUtils {
 		return arg.length();
 	}
 	
+	/**
+	 * This function will count the arguments in a function call after the function name. embedded function calls
+	 * will count as one argument, as will strings.
+	 * @param arg The string being parsed
+	 * @param start The location of the bracket at the beginning of the function
+	 * @param end The location of the bracket at the end of the function
+	 * @return the number of arguments in a function call, Integer.MAX_VALUE if a string with no closing bracket is found
+	 */
 	 public static int numberOfArg(String arg, int start, int end){
 		 int arguments = 0;
 		 
@@ -204,31 +226,5 @@ public final class ParsingUtils {
 		 }
 		 return arguments;
 	 }
-		 
-//		  int count=1;
-//		  int count_quote=1;
-//		  int number=0;
-//		  
-//		  for(int i=start;i<=end;i++){
-//		   if(arg.charAt(i)=='('){
-//		    count+=1;
-//		   }
-//		   else if(arg.charAt(i)==')'){
-//		    count-=1;
-//		   }
-//
-//		   if(arg.charAt(i)=='\"'){
-//		    count_quote+=1;
-//		   }
-//		   
-//		   if(arg.charAt(i)==' '){
-//		    if(count%2==0 && count_quote%2==1){
-//		     number+=1;
-//		    }
-//		   }
-//		  }
-//
-//		  return number;
-//		 }
 
 }

@@ -86,7 +86,7 @@ public class ParseTree {
 	 * @return the return type of this node
 	 * @throws Exception NOT NEEDED (JASONS)
 	 */
-	private Integer[] addReturnType(Node node) throws Exception {
+	private Integer[] addReturnType(Node node) {
 	
 		Integer[] type = returnType(node.getValue());
 		if (type[0] == 16) {
@@ -109,7 +109,7 @@ public class ParseTree {
 	 * @return Type of argument as an integer representation
 	 * @throws Exception NOT NEEDED (JASONS)
 	 */
-	private static Integer[] returnType(String arg) throws Exception {
+	private static Integer[] returnType(String arg) {
 		if (arg.charAt(0) == '\"'){
 			Integer[] stuff =  {1};
 			return stuff;
