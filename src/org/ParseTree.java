@@ -6,7 +6,7 @@ import java.util.LinkedList;
 
 import utils.ParsingUtils;
 /**
- * @author Anthony,Jihyun,Desdmond,Jason,Justin
+ * @author Anthony,Jihyun,Desmond,Jason,Justin
  * class about ParseTree
  */
 public class ParseTree {

@@ -14,37 +14,40 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
+/**
+ * 
+ * @author Anthony,Jihyun,Desmond,Jason,Justin
+ *
+ */
 public class TreeEvaluator {
-	
+	/**
+	 * The class which contains the commands for the interpreter
+	 */
 	private Class coms;
+	/**
+	 *	An instance of information to handle all the reflection
+	 */
 	private Information info;
 	
+	/**
+	 * 	Constructor for treeEvaluator, we need to be passed information
+	 *  about the class we are reflecting. 
+	 * @param info
+	 */
 	public TreeEvaluator(Information info) /*throws NoSuchMethodException, SecurityException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, ClassNotFoundException, IOException*/{
 		this.coms = info.cls;
-		/*for (Method m : methods)   {   
-			Class retType = m.getReturnType();   
-            String name = m.getName();   
-     
-            System.out.print("   ");   
-            // print modifiers, return type and method name   
-            String modifiers = Modifier.toString(m.getModifiers());   
-            if (modifiers.length() > 0) System.out.print(modifiers + " ");            
-            System.out.print(retType.getName() + " " + name + "(");   
-       
-            // print parameter types   
-            Class[] paramTypes = m.getParameterTypes();   
-            for (int j = 0; j < paramTypes.length; j++)   {   
-				if (j > 0) System.out.print(", ");   
-                System.out.print(paramTypes[j].getName());   
-             }   
-             System.out.println(");");   
-		}*/
-		
-		
-		
 	}
 	
-	public String evaluate(Node root) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException{
+	/**
+	 * Evaluates a complete and correct parsetree. 
+	 * <p>
+	 * evaluate is applied to a tree recursively. The evaluation of a tree
+	 * is the function present at the root node applied to the result of all
+	 * subtrees. The evaluation of a leaf is the value of that leaf.
+	 * @param root
+	 * @return
+	 */
+	public String evaluate(Node root){
 		Object[] args;
 		Class[] types;
 		int i= 0;
@@ -62,26 +65,32 @@ public class TreeEvaluator {
 		types= new Class[children.size()];
 		args = new Object[children.size()];
 		
+		//populates types[] for getmethod and args[] for invoke
 		while (iter.hasNext()) {
 			nxt = iter.next();
 			fun = evaluate(nxt);
 			switch ( root.getReturnType()[i+1] & 0b1111 ) {
+				//the argument should be a string
 				case 0b1:
 					c=String.class;
 					args[i]=fun.replace("\"","");
 					break;
+				//the argument should be a float primitive
 				case 0b100:
 					c=float.class;
 					args[i]=new Float(Float.parseFloat(fun));
 					break;
+				//the argument should be a int primitive
 				case 0b110:
 					c=int.class;
 					args[i]=new Integer(Integer.parseInt(fun));
 					break;
+				//the argument should be a Float class
 				case 0b1100:
 					c=Float.class;
 					args[i]=new Float(Float.parseFloat(fun));
 					break;
+				//the argument should be an Integer class
 				case 0b1110:
 					c=Integer.class;
 					args[i]=new Integer(Integer.parseInt(fun));
@@ -90,33 +99,28 @@ public class TreeEvaluator {
 					break;
 			}
 			
-/*			if ((nxt.getReturnType() & 7) == 0b110) {
-				args[i]=Integer.parseInt(fun);
-			}
-			else if ((nxt.getReturnType() & 7) == 0b100) {
-				args[i]=Float.parseFloat(fun);
-			}
-			else{
-				args[i]=fun.replace("\"","");
-			}*/
+
 			types[i]=c;
 			i ++;
 			
 		}
 		fun = root.getValue();
 		
-
-		fun = "" + coms.getMethod(fun, types).invoke(coms, args);
-
+		try {
+			//get the method at this node and apply it to the evaluation of its children
+			fun = "" + coms.getMethod(fun, types).invoke(coms, args);
+		}catch (Exception e){
+			//this will never ever happen
+		}
 		
 		return fun;
 	}
 	
-
-	
-	/*public static void main(String[] args) throws NoSuchMethodException, SecurityException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, ClassNotFoundException, IOException{
-		
-	}*/ 
+	/**
+	 * Main was used for testing purposes, and can safely be ignored. Just don't call it.
+	 * @param args
+	 * @throws Exception
+	 */
 	public static void main(String[] args) throws Exception{
 		ParseTree tree = new ParseTree(new Information("C:\\Users\\Darkras\\Documents\\CPSC 449\\commands.jar", "Commands"));
 		File f = new File("C:\\Users\\Darkras\\Documents\\CPSC 449\\commands.jar");
