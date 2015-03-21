@@ -14,6 +14,12 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
+import static utils.Types.BIGINTEGER;
+import static utils.Types.INTEGER;
+import static utils.Types.BIGFLOAT;
+import static utils.Types.FLOAT;
+import static utils.Types.STRING;
+import static utils.Types.ERROR;
 /**
  * 
  * @author Anthony,Jihyun,Desmond,Jason,Justin
@@ -71,27 +77,27 @@ public class TreeEvaluator {
 			fun = evaluate(nxt);
 			switch ( root.getReturnType()[i+1] & 0b1111 ) {
 				//the argument should be a string
-				case 0b1:
+				case STRING:
 					c=String.class;
 					args[i]=fun.replace("\"","");
 					break;
 				//the argument should be a float primitive
-				case 0b100:
+				case FLOAT:
 					c=float.class;
 					args[i]=new Float(Float.parseFloat(fun));
 					break;
 				//the argument should be a int primitive
-				case 0b110:
+				case INTEGER:
 					c=int.class;
 					args[i]=new Integer(Integer.parseInt(fun));
 					break;
 				//the argument should be a Float class
-				case 0b1100:
+				case BIGFLOAT:
 					c=Float.class;
 					args[i]=new Float(Float.parseFloat(fun));
 					break;
 				//the argument should be an Integer class
-				case 0b1110:
+				case BIGINTEGER:
 					c=Integer.class;
 					args[i]=new Integer(Integer.parseInt(fun));
 					break;
