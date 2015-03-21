@@ -124,7 +124,12 @@ public class Arborist {
 			ParseException ex=new ParseException("could not find function " + function, index);
 			ErrorUtils.parseError(arg,"could not find function " + function ,ex,verbose);
 		}
-		int numberOfArguments = ParsingUtils.numberOfArg(arg, index, end);
+		int numberOfArguments = 0;
+		try{
+			numberOfArguments = ParsingUtils.numberOfArg(arg, index, end);
+		} catch (ParseException ex) {
+			ErrorUtils.parseError(arg, "Could not find the closing index for string", ex, verbose);
+		}
 		tree.grow(function, numberOfArguments);
 		
 		type = ensureProperArguments(arg, function, index, end, numberOfArguments);

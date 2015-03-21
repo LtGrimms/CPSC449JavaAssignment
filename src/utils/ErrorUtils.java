@@ -35,6 +35,7 @@ public class ErrorUtils {
 	 * Ends program if the help qualifier is not in the right place
 	 */
 	public static void helpInWrongLocError() {
+		System.out.println("help in wrong location error");
 		Printing.printSynopsis();
 		System.exit(-4);
 	}
@@ -43,7 +44,7 @@ public class ErrorUtils {
 	 * Ends the program if it could not load the selected jar file specified on the command line
 	 */
 	public static void couldNotLoadJarError() {
-		
+		System.out.println("could not load jar error");
 		System.exit(-5);
 	}
 	
@@ -51,7 +52,7 @@ public class ErrorUtils {
 	 * Ends the program if it could not find the method class within the jar file specified on the command line
 	 */
 	public static void couldNotFindMethodError() {
-		
+		System.out.println("could not find method error");
 		System.exit(-6);
 	}
 	

@@ -131,6 +131,7 @@ public class Interpereter {
 		Arborist arborist = new Arborist(info, verb);
 		TreeEvaluator eval = new TreeEvaluator(info);
 		
+		Printing.printInterpreterHelp();
 		while (true) {
 			Scanner in = new Scanner(System.in);
 			System.out.print("> ");

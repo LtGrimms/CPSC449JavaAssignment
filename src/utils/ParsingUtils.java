@@ -2,6 +2,7 @@ package utils;
 
 import java.text.ParseException;
 import java.util.ArrayList;
+
 import static utils.Types.BIGINTEGER;
 import static utils.Types.INTEGER;
 import static utils.Types.BIGFLOAT;
@@ -159,19 +160,11 @@ public final class ParsingUtils {
 	 * @return The index of the next bracket, Integer.MAX_VALUE if none exist
 	 */
 	public static int findClosingQuote(String arg, int index){
-		int count=1;
-		int key=Integer.MAX_VALUE;
-		for(int i=index+1;i<arg.length();i++){
-			if(arg.charAt(i)=='"'){
-				count +=1;
-			}
-
-			if(count%2 == 0){
-				key=i;
-				break;
-			}
+		for (int i = index + 1; i < arg.length(); i++) {
+			if (arg.charAt(i) == '\"')
+				return i;
 		}
-		return key;
+		return Integer.MAX_VALUE;
 	}
 
 	/**
@@ -197,9 +190,10 @@ public final class ParsingUtils {
 	 * @param arg The string being parsed
 	 * @param start The location of the bracket at the beginning of the function
 	 * @param end The location of the bracket at the end of the function
-	 * @return the number of arguments in a function call, Integer.MAX_VALUE if a string with no closing bracket is found
+	 * @return the number of arguments in a function call
+	 * @throws ParseException if a string with no closing bracket is found
 	 */
-	 public static int numberOfArg(String arg, int start, int end){
+	 public static int numberOfArg(String arg, int start, int end) throws ParseException{
 		 int arguments = 0;
 		 
 		 int index = start + nextWord(arg, start + 1).length() + 1;
@@ -212,12 +206,13 @@ public final class ParsingUtils {
 				 continue;
 			 }
 			 if (arg.charAt(i) == '\"') {
-				 int closingBracket = findClosingBracket(arg, i);
-				 if (closingBracket == Integer.MAX_VALUE) {
-					 return Integer.MAX_VALUE;
+				 int closingQuote = findClosingQuote(arg, i);
+				 if (closingQuote == Integer.MAX_VALUE) {
+					ParseException ex=new ParseException("could not find closing quote", i);
+					throw ex;
 				 } else {
 					 arguments++;
-					 i = closingBracket;
+					 i = closingQuote;
 				 }
 			 } else {
 				 i += nextWord(arg, i).length();
